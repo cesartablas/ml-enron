@@ -1,0 +1,10 @@
+*.pyc
+feature_format.py
+tester.py
+*~
+*.png
+*.pdf
+*.ods
+*.log
+*.html
+.Rhistory

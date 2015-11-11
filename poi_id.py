@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 import sys
 import pickle
 sys.path.append("../tools/")
@@ -10,7 +11,6 @@ import logging
 LEVEL = logging.WARN
 LEVEL = logging.INFO
 LOGFILE = "poi_id.log"
-#open(LOGFILE, "w").close()
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(LEVEL)
@@ -25,6 +25,7 @@ from collections import OrderedDict as OD
 import copy
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.feature_selection import SelectKBest
 from sklearn.pipeline import Pipeline
@@ -39,7 +40,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier 
 
 from sklearn.metrics import confusion_matrix
-#from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+
 
 def prepare_dataset():
     # Load the dictionary containing the dataset
@@ -80,6 +81,7 @@ def prepare_dataset():
         dataset[name][k] = float(v)
     return dataset
 
+
 def create_new_features(dataset):
     """Create new features based on existing email features
     
@@ -109,6 +111,7 @@ def create_new_features(dataset):
         else:
             dataset[name]["ratio_from"] = "NaN"
     return dataset
+
     
 def get_scores(cm, i=0):
     """Get the scores for label i from a confusion matrix
@@ -130,6 +133,7 @@ def get_scores(cm, i=0):
     scores = OD([ (val, eval(val)) for val in "accuracy precision recall f1 f2 total_predictions tp tn fp fn".split() ])
     return scores
 
+
 def extract_features_and_labels(dataset, selected_features):
     """Return arrays of features and labels from dataset
 
@@ -144,6 +148,7 @@ def extract_features_and_labels(dataset, selected_features):
     labels, features = targetFeatureSplit(data)
     return np.array(features), np.array(labels)
 
+
 def classify(features, labels, estimator, i=0, scale_features=False):
     """Use estimator and folds to train and test features/labels
 
@@ -156,7 +161,7 @@ def classify(features, labels, estimator, i=0, scale_features=False):
     if scale_features is True:
         # Scale all features
         scale = MinMaxScaler()
-        scale.fit_transform(features)
+        features = scale.fit_transform(features)
     cm = np.zeros(4).reshape(2,2) # initialize a coufusion matrix
     folds = StratifiedShuffleSplit(labels, n_iter=1000, test_size=0.1, random_state=42)
     for train, test in folds:
@@ -167,23 +172,57 @@ def classify(features, labels, estimator, i=0, scale_features=False):
         cm += confusion_matrix(labels_test, labels_pred)
     return get_scores(cm, i)
 
-def forward_stepwise_selection(dataset, available_features, estimator, scoring="precision"):
-    """Select the features that contribute more to the ranking
+
+def prepare_graph(graph_name, graph_data, ranking=None, prefix=""):
+    """Prepare a graph of scores by k, and save it
+
+    :param graph_name: graph title and .png file name
+    :param graph_data: data to plot, containing k and scores
+    :param ranking: order of features corresponding to the data, default=None (SeleckKBest order)
+    :param prefix: prefix for the .png file name, default = ""
+    """
+    fig = plt.figure(figsize=(10,8))
+    fig_ax = fig.add_subplot(1,1,1)
+    fig_ax.set_title(graph_name)
+    fig_ax.set_xlim(0, 18)
+    fig_ax.set_ylim(0.0, 1.0)
+    fig_ax.set_xlabel("k (number of features)")
+    fig_ax.set_ylabel("Score")
+    fig_ax.plot(graph_data["k"], graph_data["precision"], "r-")
+    fig_ax.plot(graph_data["k"], graph_data["recall"], "b-")
+    fig_ax.plot(graph_data["k"], graph_data["f1"], "g-")
+    for x in range(30, 65, 5):
+        fig_ax.plot((0, 18), (.01*x, .01*x), "k:")
+    fig_ax.legend(["precision", "recall", "f1"])
+    if ranking is not None:
+        fig_ax.annotate(ranking[:6], xy=(0.5,0.15), xytext=(0.5, 0.15), size=10)
+        fig_ax.annotate(ranking[6:12], xy=(0.5,0.10), xytext=(0.5,0.10), size=10)
+        fig_ax.annotate(ranking[12:], xy=(0.5,0.05), xytext=(0.5,0.05), size=10)
+    fig.savefig(prefix + graph_name.replace(" ",  "-"))
+
+
+def forward_stepwise_selection(dataset, available_features, clf_name, clf, scaled=False, scoring="accuracy"):
+    """Select the features that contribute more to the ranking, log them and produce a graph
 
     :param available_features: list of features to consider
-    :param estimator: classifier or pipeline
+    :param clf: classifier or pipeline
+    :param clf_name: classifier or pipeline name
+    :param scaled: boofeatures scaled or not
     :param scoring: "accuracy", "precision", "recall" or "f1"
     :returns: ranking, a list of score dicts, ordered by scoring 
     """
     ranking = []
+    logger.info("\nForward Stepwise Selection with All Features, scoring by precision, estimator: " + clf_name)
+    logger.info("{:>5}{:>15}{:>15}{:>15}{:>15}".format(*"k accuracy precision recall f1".split()))
+    graph_data = {"k":[], "accuracy": [], "precision": [], "recall": [], "f1": []}
+    graph_name = "Feature Selection: Forward Stepwise, Scores: " + clf_name
     while True:
         highest_scored = (0, "")
         for f in available_features:
             features_list = ranking + [f]
-            #print(features_list)
             features, labels = extract_features_and_labels(dataset, features_list)
             try:
-                scores = classify(features, labels, estimator, i=1, scale_features=False)
+                scores = classify(features, labels, clf, i=1, scale_features=scaled)
                 if scores[scoring] > highest_scored[0]:
                     highest_scored = (scores[scoring], f, scores)
             except ValueError as err:
@@ -193,19 +232,18 @@ def forward_stepwise_selection(dataset, available_features, estimator, scoring="
         ranking.append(feature_selected)
         idx = available_features.index(feature_selected)
         del(available_features[idx])
-        logger.info("By_" + scoring + ": " + \
-                    "{:0.3f} ".format(scores[scoring]) + \
-                    "Accuracy|Precision|Recall|F1|F2|".replace(
-                        "|", ": {:0.3f} ").format(*(scores["accuracy"],
-                        scores["precision"], scores["recall"],
-                        scores["f1"], scores["f2"])) + \
-                    " Features_List: " + repr(ranking) )
+        logger.info("{:>5}{accuracy:>15.5f}{precision:>15.5f}{recall:>15.5f}{f1:>15.5f}  {ranking}".format(len(ranking), ranking=ranking, **scores ))
+        graph_data["k"].append(len(ranking))
+        for s in "accuracy precision recall f1".split():
+            graph_data[s].append(scores[s])
         if len(available_features) == 0:
             break
+    prepare_graph(graph_name, graph_data, ranking, prefix="fig-1-")
     return ranking
 
+
 def select_k_best(X, y, X_names, desc=""):
-    """Use SelectKBest to get features ordered by score
+    """Use SelectKBest to get features ordered by score, log them, ang produce a graph
 
     :param X: set of features
     :param y: labels
@@ -221,7 +259,18 @@ def select_k_best(X, y, X_names, desc=""):
         logger.info("{:30}{:15.2f}{:15.3e}".format(f, s, p))
     return sel
 
+
 def grid_best_estimator(X, y, estimator, estimator_name, param_grid, scoring="accuracy"):
+    """Perform a grid search, log results
+
+    :param X: features
+    :param y: labels
+    :param estimator: classifier or pipeline
+    :param estimator_name: classifier or pipeline name
+    :param para_grid: dict with parameters for grid search
+    :param scoring: which score to rank by
+    :returns: None
+    """
     grid_search = GridSearchCV(estimator, param_grid=param_grid,
                     verbose=0, n_jobs=4, scoring=scoring)
     grid_search.fit(X, y)
@@ -232,13 +281,21 @@ def grid_best_estimator(X, y, estimator, estimator_name, param_grid, scoring="ac
     logger.info(grid_search.best_score_)
     logger.info(grid_search.scorer_)
 
+
 def scores_by_k(X, y, clf_name, clf):
-    pass
     logger.info("\nGet scores by k-best for: " + clf_name)
     logger.info("{:>5}{:>15}{:>15}{:>15}{:>15}".format(*"k accuracy precision recall f1".split()))
+    graph_name = "Feature Selection: SelectKBest, Scores: " + clf_name
+    graph_data = {"k":[], "accuracy": [], "precision": [], "recall": [], "f1": []}
     for k in range(1,17):
         pipeline = Pipeline([("sel", SelectKBest(k=k)), ("clf", clf)])
-        logger.info("{:>5}{accuracy:>15.5f}{precision:>15.5f}{recall:>15.5f}{f1:>15.5f}".format(k,**classify(X, y, pipeline, i=1)))
+        scores = classify(X, y, pipeline, i=1)
+        logger.info("{:>5}{accuracy:>15.5f}{precision:>15.5f}{recall:>15.5f}{f1:>15.5f}".format(k, **scores))
+        graph_data["k"].append(k)
+        for s in "accuracy precision recall f1".split():
+            graph_data[s].append(scores[s])
+    if max(graph_data["precision"]) >= .3 and max(graph_data["recall"]) >= .3:
+        prepare_graph(graph_name, graph_data, prefix="fig-2-", ranking="total_stock_value exercised_stock_options bonus salary ratio_from deferred_income long_term_incentive total_payments ratio_shared restricted_stock expenses other ratio_to from_this_person_to_poi director_fees restricted_stock_deferred deferral_payments".split())
 
     
 def main():
@@ -292,9 +349,9 @@ def main():
         "total_payments",
         "total_stock_value"]
 
-    LOG = ["scores", "stepwise"]
-    LOG = ["scores"]
-    LOG = ["stepwise"]
+    LOG = ["scores", "scores_by_k", "stepwise"]
+    LOG = []
+
     if LEVEL == logging.INFO and "scores" in LOG:
         # Get features ordered by score using SelectKBest
         ## from the original features
@@ -312,16 +369,12 @@ def main():
         param_grid = {"sel__k" : range(2,16)}
         grid_best_estimator(X, y, pipeline, "Naive Bayes", param_grid, scoring="precision")
         grid_best_estimator(Xs, y, pipeline, "Naive Bayes, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(X, y, pipeline, "Naive Bayes", param_grid, scoring="f1")
-        grid_best_estimator(Xs, y, pipeline, "Naive Bayes, scaled features", param_grid, scoring="f1")
         ## KNN
         pipeline = Pipeline([("sel", SelectKBest(k=1)), ("knn", KNeighborsClassifier(n_neighbors=5))])
         param_grid = {"sel__k" : range(2,16),
                       "knn__n_neighbors" : range(1,10)}
         grid_best_estimator(X, y, pipeline, "K Neighbors", param_grid, scoring="precision")
         grid_best_estimator(Xs, y, pipeline, "K Neighbors, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(X, y, pipeline, "K Neighbors", param_grid, scoring="f1")
-        grid_best_estimator(Xs, y, pipeline, "K Neighbors, scaled features", param_grid, scoring="f1")
         ## SVC
         pipeline = Pipeline([("sel", SelectKBest()), ("svm", SVC())])
         param_grid = {"sel__k" : range(2,16),
@@ -330,15 +383,12 @@ def main():
                       "svm__gamma": [1., 10., 100.],
                       "svm__max_iter": [1, 5, 10]}
         grid_best_estimator(Xs, y, pipeline, "SVM, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "SVM, scaled features", param_grid, scoring="f1")
         ## Decision Tree
         pipeline = Pipeline([("sel", SelectKBest(k=13)), ("tree", DecisionTreeClassifier(min_samples_split=2))])
         param_grid = {"sel__k" : range(2,16),
                       "tree__min_samples_split" : range(1,30) }
         grid_best_estimator(X, y, pipeline, "Decision Tree", param_grid, scoring="precision")
         grid_best_estimator(Xs, y, pipeline, "Decision Tree, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(X, y, pipeline, "Decision Tree", param_grid, scoring="f1")
-        grid_best_estimator(Xs, y, pipeline, "Decision Tree, scaled features", param_grid, scoring="f1")
         ## AdaBoost
         pipeline = Pipeline([("sel", SelectKBest(k=13)), ("ada", AdaBoostClassifier())])
         param_grid = {"sel__k" : range(2,16),
@@ -346,135 +396,94 @@ def main():
                       "ada__learning_rate": [.1, 1.,10.]}
         grid_best_estimator(X, y, pipeline, "AdaBoost", param_grid, scoring="precision")
         grid_best_estimator(Xs, y, pipeline, "AdaBoost, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(X, y, pipeline, "AdaBoost", param_grid, scoring="f1")
-        grid_best_estimator(Xs, y, pipeline, "AdaBoost, scaled features", param_grid, scoring="f1")
         ## Random Forest
         pipeline = Pipeline([("sel", SelectKBest(k=13)), ("rfor", RandomForestClassifier())])
         param_grid = {"sel__k" : range(2,16),
                       "rfor__min_samples_split": range(1,30),}
         grid_best_estimator(X, y, pipeline, "Random Forest", param_grid, scoring="precision")
         grid_best_estimator(Xs, y, pipeline, "Random Forest, scaled features", param_grid, scoring="precision")
-        grid_best_estimator(X, y, pipeline, "Random Forest", param_grid, scoring="f1")
-        grid_best_estimator(Xs, y, pipeline, "Random Forest, scaled features", param_grid, scoring="f1")
+
+    if LEVEL == logging.INFO and "scores_by_k" in LOG:
+        X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
+        scaler = MinMaxScaler()
+        Xs = scaler.fit_transform(X)
+
+        scores_by_k(X, y, "AdaBoost()", AdaBoostClassifier())
+        """
+        scores_by_k(X, y, "Naive Bayes", GaussianNB())
+        scores_by_k(Xs, y, "Naive Bayes scaled features", GaussianNB())
+
+        scores_by_k(X, y, "KNN(1)", KNeighborsClassifier(n_neighbors=1))
+        scores_by_k(Xs, y, "KNN(1) scaled features", KNeighborsClassifier(n_neighbors=1))
+        scores_by_k(X, y, "KNN(2)", KNeighborsClassifier(n_neighbors=2))
+        scores_by_k(Xs, y, "KNN(2) scaled features", KNeighborsClassifier(n_neighbors=2))
+
+        scores_by_k(Xs, y, "SVC (C=10, kernel=linear)", SVC(C=10, kernel="linear"))
+        scores_by_k(Xs, y, "SVC (C=10, kernel=rbf)", SVC(C=10, kernel="rbf"))
+        scores_by_k(Xs, y, "SVC (C=10, kernel=poly, degree-2)", SVC(C=10, kernel="poly", degree=2))
+        
+        scores_by_k(X, y, "Decision Tree (min_samples_split=1)", DecisionTreeClassifier())
+        scores_by_k(X, y, "Decision Tree (min_samples_split=2)", DecisionTreeClassifier(min_samples_split=5))
+        scores_by_k(X, y, "Decision Tree (min_samples_split=5)", DecisionTreeClassifier(min_samples_split=10))
+        scores_by_k(X, y, "Decision Tree (min_samples_split=10)", DecisionTreeClassifier(min_samples_split=15))
+
+        scores_by_k(X, y, "AdaBoost()", AdaBoostClassifier())
+        scores_by_k(X, y, "AdaBoost (min_samples_split=5)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=5)))
+        scores_by_k(X, y, "AdaBoost (min_samples_split=10)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10)))
+        scores_by_k(X, y, "AdaBoost (min_samples_split=15)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15)))
+
+        scores_by_k(X, y, "RandomForest", RandomForestClassifier())
+        scores_by_k(X, y, "RandomForest (min_samples_split=5)", RandomForestClassifier(min_samples_split=5))
+        scores_by_k(X, y, "RandomForest (min_samples_split=10)", RandomForestClassifier(min_samples_split=10))
+        scores_by_k(X, y, "RandomForest (min_samples_split=15)", RandomForestClassifier(min_samples_split=15))
+        """
     if LEVEL == logging.INFO and "stepwise" in LOG:
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
 
-        '''
-        scores_by_k(X, y, "Naive Bayes", GaussianNB())
-        scores_by_k(Xs, y, "Naive Bayes, scaled", GaussianNB())
+        clf = AdaBoostClassifier()
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost()", clf, scoring="precision")
+        """        
+        clf = GaussianNB()
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes", clf, scoring="precision")
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes scaled features", clf, scoring="precision", scaled=True)
 
-        scores_by_k(X, y, "KNN(1)", KNeighborsClassifier(n_neighbors=1))
-        scores_by_k(Xs, y, "KNN(1), scaled", KNeighborsClassifier(n_neighbors=1))
-        scores_by_k(X, y, "KNN(2)", KNeighborsClassifier(n_neighbors=2))
-        scores_by_k(Xs, y, "KNN(2), scaled", KNeighborsClassifier(n_neighbors=2))
+        clf = KNeighborsClassifier(n_neighbors=1)
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "KNN(1)", clf, scoring="precision")
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "KNN(1) scaled features", clf, scoring="precision", scaled=True)
 
-        scores_by_k(Xs, y, "SVC linear", SVC(C=10, kernel="linear"))
-        scores_by_k(Xs, y, "SVC rbf", SVC(C=10, kernel="rbf"))
-        scores_by_k(Xs, y, "SVC poly", SVC(C=10, kernel="poly", degree=2))
-        
-        scores_by_k(X, y, "Decision Tree (1)", DecisionTreeClassifier())
-        scores_by_k(X, y, "Decision Tree (2)", DecisionTreeClassifier(min_samples_split=5))
-        scores_by_k(X, y, "Decision Tree (5)", DecisionTreeClassifier(min_samples_split=10))
-        scores_by_k(X, y, "Decision Tree (10)", DecisionTreeClassifier(min_samples_split=15))
+        clf = AdaBoostClassifier()
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost()", clf, scoring="precision")
 
-        scores_by_k(X, y, "AdaBoost", AdaBoostClassifier())
-        scores_by_k(X, y, "AdaBoost", AdaBoostClassifier(min_samples_split=5))
-        scores_by_k(X, y, "AdaBoost", AdaBoostClassifier(min_samples_split=10))
-        scores_by_k(X, y, "AdaBoost", AdaBoostClassifier(min_samples_split=15))
+        clf = AdaBoostClassifier()
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost() scaled features", clf, scoring="precision", scaled=True)
 
-        scores_by_k(X, y, "RandomForest", RandomForestClassifier())
-        scores_by_k(X, y, "RandomForest", RandomForestClassifier(min_samples_split=5))
-        scores_by_k(X, y, "RandomForest", RandomForestClassifier(min_samples_split=10))
-        scores_by_k(X, y, "RandomForest", RandomForestClassifier(min_samples_split=15))
-        '''
-        with open(LOGFILE, "r") as f:
-            lines = f.read().strip().split("\n")
+        clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10))
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost(10)", clf, scoring="precision")
 
-        lines_per_graph = 19
-        graph_no = 0
-        graphs = []
-        while lines_per_graph * graph_no <= len(lines):
-            graph_name = lines[lines_per_graph * graph_no].split(":")[1].strip()
-            graph_data = lines[lines_per_graph * graph_no + 2 : lines_per_graph * graph_no + 19]
-            graph_data = ([map(float, l.strip().split()) for l in graph_data])
-            graphs.append(OD([("no", graph_no),
-                              ("name", graph_name),
-                              ("data", graph_data)]))
-            graph_no += 1
-        graphs = pd.DataFrame(graphs)
-        # prepare individual graphs
-        # prepare summary graph
-            
+        clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))
+        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost(15)", clf, scoring="precision")
+        """
 
-    # TODO:
-
-    # select the classifier
-    # compare with the forward-stepwise that follows
-    # chose from it
-    # compare with scaling???
-    # select the features, dump files
-    #for feature_set, desc in [(original_features, "original features"), (all_features, "original plus new email features")]:
-    # Select k best original_features
-
-    """
-    features, labels = extract_features_and_labels(my_dataset, ["poi"]+all_features)
-
-    logger.info("Get all scores for various k best features")
-    logger.info("  k   precision    recall        f1")
-    for i in range(2,16):
-        pipeline = Pipeline([("sel", SelectKBest(k=i)), ("dtree", KNeighborsClassifier())])
-        logger.info("{:3}{precision:12.3f}{recall:10.3f}{f1:10.3f}".format(i,**classify(features, labels, pipeline, i=1)))
-
-    
-    logger.info("Get all scores for various k best features")
-    logger.info("  k   precision    recall        f1")
-    for i in range(2,16):
-        pipeline = Pipeline([("sel", SelectKBest(k=i)), ("dtree", DecisionTreeClassifier())])
-        logger.info("{:3}{precision:12.3f}{recall:10.3f}{f1:10.3f}".format(i,**classify(features, labels, pipeline, i=1)))
-
-
-    """
-    """
-    clf = GaussianNB()
-    
-    logger.info("\nForward Stepwise Selection with Original Features, scoring by precision")
-    af = copy.copy(original_features)
-    forward_stepwise_selection(my_dataset, af, clf, scoring="precision")
-
-    logger.info("\nForward Stepwise Selection with All Features, scoring by precision")
-    af = copy.copy(all_features)
-    forward_stepwise_selection(my_dataset, af, clf, scoring="precision")
-
-    
     # Selected Features
-    features_list = ["poi",
-        "total_stock_value", "exercised_stock_options", "bonus",
-        "salary", "ratio_from", "deferred_income",
-        "long_term_incentive", "total_payments", "ratio_shared"]
-    
-    """
-    """
-    # Classifier
-    # clf = Pipeline([("sel", SelectKBest(k=3)), ("bay", GaussianNB())])
-    clf = GausianNB()    
-    # Cross Validation
-    s = classify(features, labels, clf, 1)
+    features_list = [   "poi",
+                        "director_fees",
+                        "bonus",
+                        "restricted_stock_deferred",
+                        "expenses",
+                        "ratio_shared",
+                        "total_stock_value",
+                        "deferred_income",
+                        "deferral_payments" ]
 
-    s1 = (s["accuracy"], s["precision"], s["recall"], s["f1"], s["f2"])
-    s2 = (s["total predictions"], s["tp"], s["fp"], s["fn"], s["tn"])
-
-    print "Accuracy|Precision|Recall|F1|F2|".replace(
-                "|", ": {:0.3f}\t").format(*map(float, s1))
-    print "Total predictions|TP|FP|FN|TN|".replace(
-                "|", ": {}\t").format(*map(int, s2))
-    
+    features, labels = extract_features_and_labels(my_dataset, features_list)
+    clf = AdaBoostClassifier()
+    scores = classify(features, labels, clf, 1)
+    print(scores)
 
     # Dump classifier, dataset, and features_list to pickle files 
     dump_classifier_and_data(clf, my_dataset, features_list)
-
-    """
 
 
 if __name__ == "__main__":

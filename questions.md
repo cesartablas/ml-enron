@@ -1,4 +1,5 @@
 # Enron Scandal
+##By César Tablas
 
 ***
 
@@ -12,14 +13,12 @@ In this project I try to identify Enron employees who may have committed fraud b
 
 ## The Dataset
 
-The data file contains a pickled dictionary with 146 data points mapping the name of an Enron employee to a dictionary of 21 key:value pairs that contains financial and email information. Each employee is labeled as POI/non-POI ("Person Of Interest" in the fraud case) using the key "poi" with boolean values.
+The data file contains a pickled dictionary with 146 data points mapping the name of an Enron employee to a dictionary of 21 key:value pairs that contains financial and email information. Each employee is labeled as POI / not-POI ("Person Of Interest" in the fraud case) using the key "poi" with boolean values. After the initial exploration of the data I removed the entry "TOTAL" for not being a valid data point but an aggregation. I also removed the data point for the employee "LOCKHART EUGENE E" because it only contained missing values, and also removed the variable "email-address" which is not relevant for the poi-identifier. The number of valid data points is 144, where only 18 are labeled as POI, and the other 126 are labeled as not-POI. The number of variables or features, after removing the "email-address", is 20.
 
-After the initial exploration of the data I removed the entry "TOTAL" for not being a valid data point but an aggregation. I also removed the data point for the employee "LOCKHART EUGENE E" because it only contained missing values, and also the variable "email-address" which is not relevant for the poi-identifier.
+The data for the employees "BELFER ROBERT" and "BHATNAGAR SANJAY" had some values entered in the wrong variable. After comparing with the original table "enron61702insiderpay.pdf" I re-entered their correct values.
 
-The number of valid data points is 144, where only 18 are labeled as POI, and the other 126 are labeled as not-POI. The number of variables or features, after removing the "email-address", is 20.
+Table 1 shows the number of missing values for each variable. In this context I considered appropriate to change all these missing value to zeros. The variable "loan_advances" has only 2 valid values, with only one labeled as POI: it is not useful for classification and I did not consider it in the model.
 
-The table below shows the number of missing values for each variable. In this context I considered appropriate to change all these missing value to zeros. The variable "loan_advances" has only 2 valid values, with only one labeled as POI: it is not useful for classification and I did not consider it in the model.
- 
 Feature                     |  valid data    | missing values  
 --------------------------- | -------------: | -------------:  
 bonus                       |      80        |       64  
@@ -43,8 +42,8 @@ to_messages                 |      84        |       60
 total_payments              |     123        |       21
 total_stock_value           |     124        |       20
 
+#####**Table 1. Number of Valid and Missing Values for each Feature**
 
-The data for the employees "BELFER ROBERT" and "BHATNAGAR SANJAY" had some values entered in the wrong variable. After comparing with the original table "enron61702insiderpay.pdf" I re-entered their correct values.
 
 ***
 
@@ -76,58 +75,91 @@ rank | Feature                   |  score    |  p value   | new / old
 16   | deferral_payments         |   0.22    |  6.388e-01 |
 --   | from_messages             |   0.16    |  6.860e-01 |  old -->
 
-I performed a grid search with various classifiers, varying some parameters in each to tune them, and running them with both the original and scaled data. Scoring by **accuracy** is not appropriate for this dataset because the number of not-POI is not balanced with the number of POI, being easy to classify a lot of not-POI's correctly thus pumping up the accuracy. For this reason I needed to compare both **precision** and **f1** as the scoring value. Scaling is important for Support Vector Machines, and also gives a slight difference with Decission Trees and ensemble classifiers.
+#####**Table 2. Ranking of Features according to their Univariate F Score related to the Labels**
+
+***
+####Parameters Tuning
+
+I performed a grid search with various classifiers, varying some parameters in each to tune them, and running them with both the original and scaled data. Scoring by **accuracy** is not appropriate for this dataset because the number of not-POI is not balanced with the number of POI, being easy to classify a lot of not-POI's correctly thus pumping up the accuracy. For this reason I used **precision** as the scoring value. Scaling of the features is important for Support Vector Machines, and also gives a slight difference with Decission Trees and ensemble classifiers.
 
 Classifier | Scaled features | Scoring | Parameters | Score | Warnings
 :--------: | :-------------: | :-----: | :--------: | :---: | --------
-GaussianNB | no | precision | k=5 | 0.44444 | NA  
+GaussianNB | no | precision | k=5 | 0.44444 | --- 
 "" | yes | precision | k=5 | 0.44444 |   
-"" | no | f1 | k=5 | 0.39788 |   
-"" | yes | f1 | k=14 | 0.41673 |   
 KNeighborsClassifier | no | precision | k=10, n=3 | 0.83333 | UserWarning  
 "" | yes | precision | k=3, n=4 | 1.00000 | 
-"" | no | f1 | k=3, n=1 | 0.44250 | 
-"" | yes | f1 | k=3, n=3 | 0.41005 | 
 SVC | yes | precision | max_iter=1, k=8, C=10, kernel=linear | 0.83333 | ConvergenceWarning, UserWarning  
-"" | yes | f1 | max_iter=10, k=9, C=10, kernel=poly | 0.45679 | 
 DecisionTreeClassifier | no | precision | min_samples_split=23, k=4 | 0.80000 | UserWarning
 "" | yes | precision | min_samples_split=21, k=4 | 0.80000 | 
-"" | no | f1 | min_samples_split=8, k=3 | 0.56068 | 
-"" | yes | f1 | min_samples_split=9, k=3 | 0.57778 | 
 AdaBoostClassifier | no | precision | min_samples_split=1, k=6, learning_rate=0.1 | 0.83333 | RuntimeWarning, UserWarning
 "" | yes | precision | min_samples_split=1, k=3, learning_rate=0.1 | 0.83333 | 
-"" | no | f1 | min_samples_split=1, k=12, learning_rate=1.0 | 0.45688 | 
-"" | yes | f1 | min_samples_split=7, k=12, learning_rate=1.0 | 0.45688 | 
 RandomForestClassifier | no | precision | k=12, min_samples_split=25 | 1.00000 | UserWarning
 "" | yes | precision | k=15, min_samples_split=18 | 1.00000 | 
-"" | no | f1 | k=5, min_samples_split=8 | 0.50168 | 
-"" | yes | f1 | k=5, min_samples_split=4 | 0.52222 | 
+
+#####**Table 3. Summary of Grid Search Results**
 
 
-I 
-Forward Stepwise Selection
-loan_advances
-2097151
+Sound great? There's just one caveat: The scoring is based on the same datapoints on which the classifier was trained; and the presence of all those Warnings tells that some of the scores obtained may be erroneous. Nevertheless, it points that some classifiers may yield a better precision than Naive Bayes.
 
+***
 
+####Forward Stepwise Selection
+
+To select the features and the classifier for the algorithm I performed a Forward Stepwise Selection using the clasiifiers and parameters obtained in the previous step. Table 4 shows a comparison between the scores obtained using these classifiers and feature selection methods. The order of features for SelectKBest is the same as shown in Table 2. 
+
+Classifier | SelectKBest, k | precision  | recall | Forward Stepwise Selection, k | precision | recall | Selected Features
+----------- | ----: | ----: | ----: | ----: | ----: | ----: | :----: 
+GaussianNB | 10 | 0.40782 | 0.32850 | 9 | 0.47152 | 0.34350 | ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value'] |
+KNeighbors (n_neighbors=1) |	5 | 0.43489	| 0.34900 | 13 | 0.43657 | 0.38200 |  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value']
+KNeighbors (n_neighbors=1) scaled features | 13 | 0.38963 |	0.32300	| 7 | 0.50277 |	0.45300 | ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'exercised_stock_options', 'salary']
+AdaBoost | 14 | 0.42515 | 0.32800 | 8 | 0.58243	| 0.40100 | ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments']
+
+#####**Table 4. Precision and Recall for different Classifiers and Feature Selection Method**
+
+***
+
+![Forward Stepwise Selection of Features](fig-1.png)
+
+#####**Fig 1. Scores by Number of Features using AdaBoost Classifier, Features selected by Forward Stepwise Method**
+
+***
+
+![Selected K Best Features](fig-2.png)
+
+#####**Fig 2. Scores by Number of Features using AdaBoost Classifier, Features selected by SelectKBest Univariate Method**
 
 
 ***
 ## Algorithm
 
-I decided to try the following classifiers: Naive Bayes, Support Vector Machines, and Linear Discriminant Analysis. To tune some of their parameters I used a grid search and after considering all the results, I chose Naive Bayes for being the simplest method that yields satisfactory performance.
+#####**Classifier:** AdaBoostClassifier  
 
-Naive Bayes has no additional parameters to tune, but for other classifiers I used GridSearchCV that performs an exhaustive search of the best predictor by trying all combinations of the given parameters. e.g. to tune the SVM, I searched using "linear" and "rbf" kernels, and values of C of .1, 1, or 10. For this case, the best predictor was using a "linear" kernel with a value of C=10.
+#####**Parameters Used:** Default
+
+#####**Features Selected:**  
+
+- director_fees  
+- bonus  
+- restricted_stock_deferred  
+- expenses  
+- ratio_shared  
+- total_stock_value  
+- deferred_income  
+- deferral_payments  
 
 ***
 ## Validation
 
 The dataset contains 144 valid observations and only 18 of them are labeled POI. Due to the limitation in the number of observations and the low number of POI's, it is difficult to use a conventional validation like setting asside 30% of the data for testing, and training on the 70% left. For this reason, I used a StratifiedShuffleSplit cross validation, in which for each iteration the dataset is partitioned into a training and testing set and the model performance is averaged from all iterations.
 
+***
+
 ## Performance
 
 The algorithm has the following average performace:  
-- Precision: 0.435: Of those predicted as POI, 43.5% are indeed POI, while the rest are not.  
-- Recall:    0.345: Of the real POI's, only 34.5% are predicted correctly. 
 
+- **Precision = 0.62:** Of those predicted as POI, 62% are indeed POI, while the rest are not.  
 
+- **Recall = 0.44:** Of the real POI's, only 44% are predicted correctly. 
+
+***
