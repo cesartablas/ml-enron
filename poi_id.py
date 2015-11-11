@@ -408,8 +408,6 @@ def main():
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
 
-        scores_by_k(X, y, "AdaBoost()", AdaBoostClassifier())
-        """
         scores_by_k(X, y, "Naive Bayes", GaussianNB())
         scores_by_k(Xs, y, "Naive Bayes scaled features", GaussianNB())
 
@@ -436,15 +434,12 @@ def main():
         scores_by_k(X, y, "RandomForest (min_samples_split=5)", RandomForestClassifier(min_samples_split=5))
         scores_by_k(X, y, "RandomForest (min_samples_split=10)", RandomForestClassifier(min_samples_split=10))
         scores_by_k(X, y, "RandomForest (min_samples_split=15)", RandomForestClassifier(min_samples_split=15))
-        """
+
     if LEVEL == logging.INFO and "stepwise" in LOG:
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
 
-        clf = AdaBoostClassifier()
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost()", clf, scoring="precision")
-        """        
         clf = GaussianNB()
         forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes", clf, scoring="precision")
         forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes scaled features", clf, scoring="precision", scaled=True)
@@ -464,7 +459,6 @@ def main():
 
         clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))
         forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost(15)", clf, scoring="precision")
-        """
 
     # Selected Features
     features_list = [   "poi",
