@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 # Enron Scandal
 ##By César Tablas
 
@@ -49,7 +52,7 @@ total_stock_value           |     124        |       20
 
 ## Feature Selection
 
-Ordering the features by their univariate F score, we get an idea of which features are more significant. The original email features are ranked in the lower half, which led me to think that it doesn't matter if somene sends/receives 100 emails or 10,000, but if someone sends/receives a high proportion of those emails to/from POI's, it can tell if they are involved. I created 3 ratios of emails sent/received/shared with POI's. These new features rank higher than the old ones. For now on, I will consider only the new email features in the model that now consists of 16 features.
+Ordering the features by their univariate F score, we get an idea of which features are more significant. The original email features are ranked in the lower half, which led me to think that it doesn't matter if somene sends/receives 100 emails or 10,000, but if someone sends/receives a high proportion of those emails to/from POI's, it can tell if they are involved. I created 3 ratios of emails sent/received/shared with POI's. These new features rank higher than the old ones. From now on, I will consider only the new email features in the model that now consists of 16 features.
 
 rank | Feature                   |  score    |  p value   | new / old
 ---: | ------------------------- | --------: | ---------: | ---------
@@ -78,43 +81,68 @@ rank | Feature                   |  score    |  p value   | new / old
 #####**Table 2. Ranking of Features according to their Univariate F Score related to the Labels**
 
 ***
+
 ####Parameters Tuning
 
-I performed a grid search with various classifiers, varying some parameters in each to tune them, and running them with both the original and scaled data. Scoring by **accuracy** is not appropriate for this dataset because the number of not-POI is not balanced with the number of POI, being easy to classify a lot of not-POI's correctly thus pumping up the accuracy. For this reason I used **precision** as the scoring value. Scaling of the features is important for Support Vector Machines, and also gives a slight difference with Decission Trees and ensemble classifiers.
+With a rich library like scikit-learn we have a plethora of algorithms at our disposal to analyze our data and each algorithm has many parameters that influence their outcome in the learning process, so that some parameters need to be adjusted precisely to agree with the observations. The process of Fine Tuning an algorithm consists on determining the correct set of parameters that will render an optimum outcome with our data. This process could be done manually, or it can be automated with a grid search in which every proposed parameter combination is tested and the best result is reported. The process of fine tuning an algorithm depends on understanding how each algorithm works and which parameters influence their outcome, and its importance lies in obtaining a closer match between our observations and our predictions.
 
-Classifier | Scaled features | Scoring | Parameters | Score | Warnings
-:--------: | :-------------: | :-----: | :--------: | :---: | --------
-GaussianNB | no | precision | k=5 | 0.44444 | --- 
-"" | yes | precision | k=5 | 0.44444 |   
-KNeighborsClassifier | no | precision | k=10, n=3 | 0.83333 | UserWarning  
-"" | yes | precision | k=3, n=4 | 1.00000 | 
-SVC | yes | precision | max_iter=1, k=8, C=10, kernel=linear | 0.83333 | ConvergenceWarning, UserWarning  
-DecisionTreeClassifier | no | precision | min_samples_split=23, k=4 | 0.80000 | UserWarning
-"" | yes | precision | min_samples_split=21, k=4 | 0.80000 | 
-AdaBoostClassifier | no | precision | min_samples_split=1, k=6, learning_rate=0.1 | 0.83333 | RuntimeWarning, UserWarning
-"" | yes | precision | min_samples_split=1, k=3, learning_rate=0.1 | 0.83333 | 
-RandomForestClassifier | no | precision | k=12, min_samples_split=25 | 1.00000 | UserWarning
-"" | yes | precision | k=15, min_samples_split=18 | 1.00000 | 
+I performed a grid search with various classifiers, varying some parameters in each one to tune them, and running them with both the original and scaled data. Scoring by **accuracy** is not appropriate for this dataset because the number of not-POI is not balanced with the number of POI, being easy to classify a lot of not-POI's correctly thus pumping up the accuracy. For this reason I used **precision** and **recall** as the scoring values. Scaling of the features is important for Support Vector Machines, not influencing much the other classifiers used.
+
+Classifier    | Scaled | Scoring   | Parameters                 | Score  
+:--------:    | :---:  | :-----:   | :--------:                 | :---:  
+Naive Bayes   | no     | precision | k=5                        | 0.415  
+""            | yes    | precision | k=12                       | 0.449  
+""            | no     | recall    | k=14                       | 0.990  
+""            | yes    | recall    | k=15                       | 0.920  
+KNN           | no     | precision | k=6, n=1                   | 0.407  
+""            | yes    | precision | k=15, n=1                  | 0.371  
+""            | no     | recall    | k=6, n=1                   | 0.325  
+""            | yes    | recall    | k=12, n=1                  | 0.365  
+SVC           | yes    | precision | k=15, C=20, kernel=linear  | 0.430  
+""            | yes    | recall    | k=15, C=20, kernel=linear  | 0.240  
+Decision Tree | no     | precision | k=4, min_samples_split=5   | 0.310   
+""            | yes    | precision | k=12, min_samples_split=5  | 0.269  
+""            | no     | recall    | k=3, min_samples_split=1   | 0.325  
+""            | yes    | recall    | k=15, min_samples_split=1  | 0.340  
+AdaBoost      | no     | precision | k=11, min_samples_split=1  | 0.412  
+""            | yes    | precision | min_samples_split=10, k=12 | 0.404  
+""            | no     | recall    | k=15, min_samples_split=10 | 0.395  
+""            | yes    | recall    | k=14, min_samples_split=1  | 0.340  
+Random Forest | no     | precision | k=15, min_samples_split=15 | 0.355  
+""            | yes    | precision | k=6, min_samples_split=2   | 0.352   
+""            | no     | recall    | k=9, min_samples_split=15  | 0.215   
+""            | yes    | recall    | k=11, min_samples_split=15 | 0.230   
 
 #####**Table 3. Summary of Grid Search Results**
-
-
-Sound great? There's just one caveat: The scoring is based on the same datapoints on which the classifier was trained; and the presence of all those Warnings tells that some of the scores obtained may be erroneous. Nevertheless, it points that some classifiers may yield a better precision than Naive Bayes.
 
 ***
 
 ####Forward Stepwise Selection
 
-To select the features and the classifier for the algorithm I performed a Forward Stepwise Selection using the clasiifiers and parameters obtained in the previous step. Table 4 shows a comparison between the scores obtained using these classifiers and feature selection methods. The order of features for SelectKBest is the same as shown in Table 2. 
+To select the features and the classifier for the algorithm I performed a Forward Stepwise Selection using the clasiifiers and parameters obtained in the previous step. Tables 4 and 5 show a comparison between the scores obtained using these classifiers and two different feature selection methods. The order of features for SelectKBest is the same as shown in Table 2. 
 
-Classifier | SelectKBest, k | precision  | recall | Forward Stepwise Selection, k | precision | recall | Selected Features
------------ | ----: | ----: | ----: | ----: | ----: | ----: | :----: 
-GaussianNB | 10 | 0.40782 | 0.32850 | 9 | 0.47152 | 0.34350 | ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value'] |
-KNeighbors (n_neighbors=1) |	5 | 0.43489	| 0.34900 | 13 | 0.43657 | 0.38200 |  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value']
-KNeighbors (n_neighbors=1) scaled features | 13 | 0.38963 |	0.32300	| 7 | 0.50277 |	0.45300 | ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'exercised_stock_options', 'salary']
-AdaBoost | 14 | 0.42515 | 0.32800 | 8 | 0.58243	| 0.40100 | ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments']
+***
 
-#####**Table 4. Precision and Recall for different Classifiers and Feature Selection Method**
+Classifier | k | precision  | recall | SelectKBest Selected Features
+----------- | ----: | ----: | ----: | ------------------  
+GaussianNB | 10 | 0.40782 | 0.32850 | ['total_stock_value', 'exercised_stock_options', 'bonus', 'salary', 'ratio_from', 'deferred_income', 'long_term_incentive', 'total_payments', 'ratio_shared', 'restricted_stock']  
+KNeighbors (n_neighbors=1) |	5 | 0.43489	| 0.34900 | ['total_stock_value', 'exercised_stock_options', 'bonus', 'salary', 'ratio_from'] 
+KNeighbors (n_neighbors=1) scaled features | 13 | 0.38963 |	0.32300	| ['total_stock_value', 'exercised_stock_options', 'bonus', 'salary', 'ratio_from', 'deferred_income', 'long_term_incentive', 'total_payments', 'ratio_shared', 'restricted_stock', 'expenses', 'other', 'ratio_to'] 
+AdaBoost | 14 | 0.42515 | 0.32800 | ['total_stock_value', 'exercised_stock_options', 'bonus', 'salary', 'ratio_from', 'deferred_income', 'long_term_incentive', 'total_payments', 'ratio_shared', 'restricted_stock', 'expenses', 'other', 'ratio_to', 'director_fees'] 
+
+#####**Table 4. Precision and Recall for different Classifiers with features selected by SelectKBest Method**
+
+***
+
+Classifier | k | precision | recall | Forward Stepwise Selected Features 
+---------- | ----: | ----: | ----: | :-----------------
+GaussianNB | 9 | 0.47152 | 0.34350 | ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value']
+KNeighbors (n_neighbors=1) | 13 | 0.43657 | 0.38200 |  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value']  
+KNeighbors (n_neighbors=1) scaled features | 7 | 0.50277 |	0.45300 | ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'exercised_stock_options', 'salary']  
+AdaBoost | 8 | 0.58243	| 0.40100 | ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments']  
+
+#####**Table 5. Precision and Recall for different Classifiers with features selected by Forward Stepwise Method**
+
 
 ***
 
@@ -130,6 +158,7 @@ AdaBoost | 14 | 0.42515 | 0.32800 | 8 | 0.58243	| 0.40100 | ['director_fees', 'b
 
 
 ***
+
 ## Algorithm
 
 #####**Classifier:** AdaBoostClassifier  
@@ -145,18 +174,22 @@ AdaBoost | 14 | 0.42515 | 0.32800 | 8 | 0.58243	| 0.40100 | ['director_fees', 'b
 - ratio_shared  
 - total_stock_value  
 - deferred_income  
-- deferral_payments  
+- deferral_payments
+
 
 ***
+
 ## Validation
 
-The dataset contains 144 valid observations and only 18 of them are labeled POI. Due to the limitation in the number of observations and the low number of POI's, it is difficult to use a conventional validation like setting asside 30% of the data for testing, and training on the 70% left. For this reason, I used a StratifiedShuffleSplit cross validation, in which for each iteration the dataset is partitioned into a training and testing set and the model performance is averaged from all iterations.
+The whole point of building and tuning a classification model is to use it when new data comes along and determine which class it belongs to. In our case, the data is a closed chapter: Fortunately, there won't be any more Enron employees that can be POI/not-POI. However, for the sake of being thorough, we need to evaluate the performance of our model. In the case of production datasets when new data is going to appear, we need to evaluate the performace of the model with the data at hand. For this purpose it is a good practice to put aside a portion of the dataset to test the model that has been trained or developed with the rest of the data. The failure of doing so could lead to a false perception of the real performance of our model: we need to have an insight on how the model will generalize on an independent or new dataset.
+
+In our case, the dataset contains 144 valid observations and only 18 of them are labeled POI. Due to the limitation in the number of observations and the low number of POI's, it is difficult to use a conventional validation like setting asside 30% of the data for testing, and training on the 70% left. For this reason, I used a StratifiedShuffleSplit cross-validation, in which for each iteration the dataset is partitioned into a training and testing set and the model performance is averaged from all iterations. Cross-validation is important in guarding against problems like overfitting or testing hypotheses suggested by the data.
 
 ***
 
 ## Performance
 
-The algorithm has the following average performace:  
+The algorithm has the following average performance:  
 
 - **Precision = 0.62:** Of those predicted as POI, 62% are indeed POI, while the rest are not.  
 

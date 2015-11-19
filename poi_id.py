@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -9,7 +9,6 @@ from tester import dump_classifier_and_data
 
 import logging
 LEVEL = logging.WARN
-LEVEL = logging.INFO
 LOGFILE = "poi_id.log"
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -19,12 +18,9 @@ formatter = logging.Formatter("%(message)s")
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-from pprint import pprint
-
 from collections import OrderedDict as OD
 import copy
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.feature_selection import SelectKBest
@@ -112,7 +108,7 @@ def create_new_features(dataset):
             dataset[name]["ratio_from"] = "NaN"
     return dataset
 
-    
+
 def get_scores(cm, i=0):
     """Get the scores for label i from a confusion matrix
 
@@ -149,7 +145,7 @@ def extract_features_and_labels(dataset, selected_features):
     return np.array(features), np.array(labels)
 
 
-def classify(features, labels, estimator, i=0, scale_features=False):
+def classify(features, labels, estimator, i=0, scale_features=False, n_iter=100):
     """Use estimator and folds to train and test features/labels
 
     :param features: array of variables/features
@@ -163,7 +159,7 @@ def classify(features, labels, estimator, i=0, scale_features=False):
         scale = MinMaxScaler()
         features = scale.fit_transform(features)
     cm = np.zeros(4).reshape(2,2) # initialize a coufusion matrix
-    folds = StratifiedShuffleSplit(labels, n_iter=1000, test_size=0.1, random_state=42)
+    folds = StratifiedShuffleSplit(labels, n_iter=n_iter, test_size=0.1, random_state=42)
     for train, test in folds:
         features_train, labels_train =  features[train], labels[train]
         features_test, labels_test =  features[test], labels[test]
@@ -212,22 +208,23 @@ def forward_stepwise_selection(dataset, available_features, clf_name, clf, scale
     :returns: ranking, a list of score dicts, ordered by scoring 
     """
     ranking = []
-    logger.info("\nForward Stepwise Selection with All Features, scoring by precision, estimator: " + clf_name)
+    logger.info("\nForward Stepwise Selection with All Features, scoring by " + scoring + ", estimator: " + clf_name + ", scaled=" + str(scaled))
     logger.info("{:>5}{:>15}{:>15}{:>15}{:>15}".format(*"k accuracy precision recall f1".split()))
     graph_data = {"k":[], "accuracy": [], "precision": [], "recall": [], "f1": []}
-    graph_name = "Feature Selection: Forward Stepwise, Scores: " + clf_name
+    graph_name = "Forward Stepwise, " + clf_name + ", scoring: " + scoring + ", scaled: " + str(scaled) 
     while True:
-        highest_scored = (0, "")
+        highest_scored = (0, "", None)
         for f in available_features:
             features_list = ranking + [f]
             features, labels = extract_features_and_labels(dataset, features_list)
             try:
-                scores = classify(features, labels, clf, i=1, scale_features=scaled)
+                scores = classify(features, labels, clf, i=1, scale_features=scaled, n_iter=1000)
                 if scores[scoring] > highest_scored[0]:
                     highest_scored = (scores[scoring], f, scores)
             except ValueError as err:
                 logger.warn("ranking: " + repr(ranking) + \
                         " feature: " + f + "\n" + repr(err))
+                continue
         feature_selected = highest_scored[1]
         ranking.append(feature_selected)
         idx = available_features.index(feature_selected)
@@ -260,7 +257,7 @@ def select_k_best(X, y, X_names, desc=""):
     return sel
 
 
-def grid_best_estimator(X, y, estimator, estimator_name, param_grid, scoring="accuracy"):
+def grid_best_estimator(X, y, estimator, estimator_name, param_grid, cv=None, scoring="accuracy"):
     """Perform a grid search, log results
 
     :param X: features
@@ -272,7 +269,7 @@ def grid_best_estimator(X, y, estimator, estimator_name, param_grid, scoring="ac
     :returns: None
     """
     grid_search = GridSearchCV(estimator, param_grid=param_grid,
-                    verbose=0, n_jobs=4, scoring=scoring)
+                    verbose=0, n_jobs=2, cv=cv, scoring=scoring)
     grid_search.fit(X, y)
     logger.info("\nGrid search of best estimator using: " + \
                 estimator_name + ", scoring: " + scoring)
@@ -295,9 +292,9 @@ def scores_by_k(X, y, clf_name, clf):
         for s in "accuracy precision recall f1".split():
             graph_data[s].append(scores[s])
     if max(graph_data["precision"]) >= .3 and max(graph_data["recall"]) >= .3:
-        prepare_graph(graph_name, graph_data, prefix="fig-2-", ranking="total_stock_value exercised_stock_options bonus salary ratio_from deferred_income long_term_incentive total_payments ratio_shared restricted_stock expenses other ratio_to from_this_person_to_poi director_fees restricted_stock_deferred deferral_payments".split())
+        prepare_graph(graph_name, graph_data, prefix="fig-2-", ranking="total_stock_value exercised_stock_options bonus salary ratio_from deferred_income long_term_incentive total_payments ratio_shared restricted_stock expenses other ratio_to director_fees restricted_stock_deferred deferral_payments".split())
 
-    
+
 def main():
     # Load dataset, eliminate outliers, make corrections
     data_dict = prepare_dataset()
@@ -349,10 +346,10 @@ def main():
         "total_payments",
         "total_stock_value"]
 
-    LOG = ["scores", "scores_by_k", "stepwise"]
+    LOG = ["univariate", "scores", "scores_by_k", "stepwise"]
     LOG = []
 
-    if LEVEL == logging.INFO and "scores" in LOG:
+    if LEVEL == logging.INFO and "univariate" in LOG:
         # Get features ordered by score using SelectKBest
         ## from the original features
         X, y = extract_features_and_labels(my_dataset, ["poi"]+original_features)
@@ -360,105 +357,81 @@ def main():
         # from the original + new email fatures
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         select_k_best(X, y, all_features, desc="Original + New Features")
+        
+    if LEVEL == logging.INFO and "scores" in LOG:
         # Try different classifiers and gridsearch
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
-        ## GaussianNB
-        pipeline = Pipeline([("sel", SelectKBest(k=1)), ("bay", GaussianNB())])
-        param_grid = {"sel__k" : range(2,16)}
-        grid_best_estimator(X, y, pipeline, "Naive Bayes", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "Naive Bayes, scaled features", param_grid, scoring="precision")
-        ## KNN
-        pipeline = Pipeline([("sel", SelectKBest(k=1)), ("knn", KNeighborsClassifier(n_neighbors=5))])
-        param_grid = {"sel__k" : range(2,16),
-                      "knn__n_neighbors" : range(1,10)}
-        grid_best_estimator(X, y, pipeline, "K Neighbors", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "K Neighbors, scaled features", param_grid, scoring="precision")
-        ## SVC
-        pipeline = Pipeline([("sel", SelectKBest()), ("svm", SVC())])
-        param_grid = {"sel__k" : range(2,16),
-                      "svm__C" : [10, 20, 25, 30, 50],
-                      "svm__kernel": ["rbf", "poly", "sigmoid", "linear"],
-                      "svm__gamma": [1., 10., 100.],
-                      "svm__max_iter": [1, 5, 10]}
-        grid_best_estimator(Xs, y, pipeline, "SVM, scaled features", param_grid, scoring="precision")
-        ## Decision Tree
-        pipeline = Pipeline([("sel", SelectKBest(k=13)), ("tree", DecisionTreeClassifier(min_samples_split=2))])
-        param_grid = {"sel__k" : range(2,16),
-                      "tree__min_samples_split" : range(1,30) }
-        grid_best_estimator(X, y, pipeline, "Decision Tree", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "Decision Tree, scaled features", param_grid, scoring="precision")
-        ## AdaBoost
-        pipeline = Pipeline([("sel", SelectKBest(k=13)), ("ada", AdaBoostClassifier())])
-        param_grid = {"sel__k" : range(2,16),
-                      "ada__base_estimator__min_samples_split": range(1,30),
-                      "ada__learning_rate": [.1, 1.,10.]}
-        grid_best_estimator(X, y, pipeline, "AdaBoost", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "AdaBoost, scaled features", param_grid, scoring="precision")
-        ## Random Forest
-        pipeline = Pipeline([("sel", SelectKBest(k=13)), ("rfor", RandomForestClassifier())])
-        param_grid = {"sel__k" : range(2,16),
-                      "rfor__min_samples_split": range(1,30),}
-        grid_best_estimator(X, y, pipeline, "Random Forest", param_grid, scoring="precision")
-        grid_best_estimator(Xs, y, pipeline, "Random Forest, scaled features", param_grid, scoring="precision")
+        cv = StratifiedShuffleSplit(y, n_iter=100, test_size=0.1)
+        scoring = "recall"
+        for scaled, name, clf, param_grid in [
+                (0, "Naive Bayes", Pipeline([("sel", SelectKBest()), ("bay", GaussianNB())]), {"sel__k" : range(2,16)}),
+                (1, "Naive Bayes scaled", Pipeline([("sel", SelectKBest()), ("bay", GaussianNB())]), {"sel__k" : range(2,16)}),
+                (0, "KNN", Pipeline([("sel", SelectKBest()), ("knn", KNeighborsClassifier())]), {"sel__k": range(2,16), "knn__n_neighbors": range(1,10)}),
+                (1, "KNN scaled", Pipeline([("sel", SelectKBest()), ("knn", KNeighborsClassifier())]), {"sel__k": range(2,16), "knn__n_neighbors": range(1,10)}),
+                (1, "SVM scaled", Pipeline([("sel", SelectKBest()), ("svm", SVC())]), {"sel__k": range(2,16), "svm__C": [10, 20, 25, 30, 50], "svm__kernel": ["rbf", "poly", "linear"]}),
+                (0, "DecisionTree", Pipeline([("sel", SelectKBest()), ("tree", DecisionTreeClassifier())]), {"sel__k": range(2,16),  "tree__min_samples_split": [1,5,10,15]}),
+                (1, "DecisionTree", Pipeline([("sel", SelectKBest()), ("tree", DecisionTreeClassifier())]), {"sel__k": range(2,16),  "tree__min_samples_split": [1,5,10,15]}),
+                (0, "AdaBoost", Pipeline([("sel", SelectKBest()), ("ada", AdaBoostClassifier())]), {"sel__k": range(2,16),  "ada__base_estimator__min_samples_split": [1,5,10,15]}),
+                (1, "AdaBoost scaled", Pipeline([("sel", SelectKBest()), ("ada", AdaBoostClassifier())]), {"sel__k": range(2,16),  "ada__base_estimator__min_samples_split": [1,5,10,15]}),
+                (0, "Random Forest", Pipeline([("sel", SelectKBest()), ("rfor", RandomForestClassifier())]), {"sel__k": range(2,16), "rfor__min_samples_split": [1,2,15]}),
+                (1, "Random Forest scaled", Pipeline([("sel", SelectKBest()), ("rfor", RandomForestClassifier())]), {"sel__k": range(2,16), "rfor__min_samples_split": [1,2,15]}),
+            ]:
+            grid_best_estimator(Xs if scaled else X, y, clf, name, param_grid, cv, scoring)
 
     if LEVEL == logging.INFO and "scores_by_k" in LOG:
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
-
-        scores_by_k(X, y, "Naive Bayes", GaussianNB())
-        scores_by_k(Xs, y, "Naive Bayes scaled features", GaussianNB())
-
-        scores_by_k(X, y, "KNN(1)", KNeighborsClassifier(n_neighbors=1))
-        scores_by_k(Xs, y, "KNN(1) scaled features", KNeighborsClassifier(n_neighbors=1))
-        scores_by_k(X, y, "KNN(2)", KNeighborsClassifier(n_neighbors=2))
-        scores_by_k(Xs, y, "KNN(2) scaled features", KNeighborsClassifier(n_neighbors=2))
-
-        scores_by_k(Xs, y, "SVC (C=10, kernel=linear)", SVC(C=10, kernel="linear"))
-        scores_by_k(Xs, y, "SVC (C=10, kernel=rbf)", SVC(C=10, kernel="rbf"))
-        scores_by_k(Xs, y, "SVC (C=10, kernel=poly, degree-2)", SVC(C=10, kernel="poly", degree=2))
-        
-        scores_by_k(X, y, "Decision Tree (min_samples_split=1)", DecisionTreeClassifier())
-        scores_by_k(X, y, "Decision Tree (min_samples_split=2)", DecisionTreeClassifier(min_samples_split=5))
-        scores_by_k(X, y, "Decision Tree (min_samples_split=5)", DecisionTreeClassifier(min_samples_split=10))
-        scores_by_k(X, y, "Decision Tree (min_samples_split=10)", DecisionTreeClassifier(min_samples_split=15))
-
-        scores_by_k(X, y, "AdaBoost()", AdaBoostClassifier())
-        scores_by_k(X, y, "AdaBoost (min_samples_split=5)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=5)))
-        scores_by_k(X, y, "AdaBoost (min_samples_split=10)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10)))
-        scores_by_k(X, y, "AdaBoost (min_samples_split=15)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15)))
-
-        scores_by_k(X, y, "RandomForest", RandomForestClassifier())
-        scores_by_k(X, y, "RandomForest (min_samples_split=5)", RandomForestClassifier(min_samples_split=5))
-        scores_by_k(X, y, "RandomForest (min_samples_split=10)", RandomForestClassifier(min_samples_split=10))
-        scores_by_k(X, y, "RandomForest (min_samples_split=15)", RandomForestClassifier(min_samples_split=15))
+        for scaled, name, clf in [
+                (0, "Naive Bayes", GaussianNB()),
+                (1, "Naive Bayes scaled", GaussianNB()),
+                (0, "KNN(1)", KNeighborsClassifier(n_neighbors=1)),
+                (1, "KNN(1) scaled", KNeighborsClassifier(n_neighbors=1)),
+                (0, "KNN(2)", KNeighborsClassifier(n_neighbors=2)),
+                (1, "KNN(2) scaled", KNeighborsClassifier(n_neighbors=2)),
+                (1, "SVC (C=10,  kernel=linear)", SVC(C=10,  kernel="linear")),
+                (1, "SVC (C=10,  kernel=rbf)", SVC(C=10,  kernel="rbf")),
+                (1, "SVC (C=10,  kernel=poly 2)", SVC(C=10,  kernel="poly", degree=2)),
+                (0, "Decision Tree (1)", DecisionTreeClassifier()),
+                (0, "Decision Tree (2)", DecisionTreeClassifier(min_samples_split=5)),
+                (0, "Decision Tree (5)", DecisionTreeClassifier(min_samples_split=10)),
+                (0, "Decision Tree (10)", DecisionTreeClassifier(min_samples_split=15)),
+                (0, "AdaBoost()", AdaBoostClassifier()),
+                (0, "AdaBoost(5)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=5))),
+                (0, "AdaBoost(10)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10))),
+                (0, "AdaBoost(15)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))),
+                (0, "RandomForest()", RandomForestClassifier()),
+                (0, "RandomForest(5)", RandomForestClassifier(min_samples_split=5)),
+                (0, "RandomForest(10)", RandomForestClassifier(min_samples_split=10)),
+                (0, "RandomForest(15)", RandomForestClassifier(min_samples_split=15)),
+            ]:
+            scores_by_k(Xs if scaled else X, y, name, clf)
 
     if LEVEL == logging.INFO and "stepwise" in LOG:
         X, y = extract_features_and_labels(my_dataset, ["poi"]+all_features)
         scaler = MinMaxScaler()
         Xs = scaler.fit_transform(X)
+        for scoring in ("precision", "recall"):
+            for scaled, name, clf in [
+                (0, "Naive Bayes", GaussianNB()),
+                (1, "Naive Bayes", GaussianNB()),
+                (0, "KNN(1)", KNeighborsClassifier(n_neighbors=1)),
+                (1, "KNN(1)", KNeighborsClassifier(n_neighbors=1)),
+                (0, "KNN(2)", KNeighborsClassifier(n_neighbors=2)),
+                (1, "KNN(2)", KNeighborsClassifier(n_neighbors=2)),
+                (0, "AdaBoost()", AdaBoostClassifier()),
+                (1, "AdaBoost()", AdaBoostClassifier()),
+                (0, "AdaBoost(5)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=5))),
+                (1, "AdaBoost(5)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=5))),
+                (0, "AdaBoost(10)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10))),
+                (1, "AdaBoost(10)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10))),
+                (0, "AdaBoost(15)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))),
+                (1, "AdaBoost(15)", AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))),
+                ]:
+                forward_stepwise_selection(my_dataset, copy.copy(all_features), name, clf, scaled, scoring)
 
-        clf = GaussianNB()
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes", clf, scoring="precision")
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "Naive Bayes scaled features", clf, scoring="precision", scaled=True)
-
-        clf = KNeighborsClassifier(n_neighbors=1)
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "KNN(1)", clf, scoring="precision")
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "KNN(1) scaled features", clf, scoring="precision", scaled=True)
-
-        clf = AdaBoostClassifier()
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost()", clf, scoring="precision")
-
-        clf = AdaBoostClassifier()
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost() scaled features", clf, scoring="precision", scaled=True)
-
-        clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=10))
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost(10)", clf, scoring="precision")
-
-        clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(min_samples_split=15))
-        forward_stepwise_selection(my_dataset, copy.copy(all_features), "AdaBoost(15)", clf, scoring="precision")
 
     # Selected Features
     features_list = [   "poi",
@@ -473,7 +446,7 @@ def main():
 
     features, labels = extract_features_and_labels(my_dataset, features_list)
     clf = AdaBoostClassifier()
-    scores = classify(features, labels, clf, 1)
+    scores = classify(features, labels, clf, i=1, scale_features=False, n_iter=1000)
     print(scores)
 
     # Dump classifier, dataset, and features_list to pickle files 
@@ -482,3 +455,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    #from itertools import combinations
+    #print len(list(combinations(range(16),8)))

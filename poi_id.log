@@ -1,0 +1,1306 @@
+
+SelectKBest scores for feature set: Original Features
+Feature                               F_score        p_value
+------------------------------------------------------------
+total_stock_value                       22.78      4.461e-06
+exercised_stock_options                 22.61      4.818e-06
+bonus                                   21.06      9.702e-06
+salary                                  18.58      3.034e-05
+deferred_income                         11.56      8.743e-04
+long_term_incentive                     10.07      1.845e-03
+total_payments                           9.38      2.625e-03
+restricted_stock                         8.96      3.258e-03
+shared_receipt_with_poi                  8.75      3.634e-03
+expenses                                 5.55      1.984e-02
+from_poi_to_this_person                  5.34      2.222e-02
+other                                    4.22      4.179e-02
+from_this_person_to_poi                  2.43      1.215e-01
+director_fees                            2.11      1.483e-01
+to_messages                              1.70      1.946e-01
+restricted_stock_deferred                0.76      3.842e-01
+deferral_payments                        0.22      6.388e-01
+from_messages                            0.16      6.860e-01
+
+SelectKBest scores for feature set: Original + New Features
+Feature                               F_score        p_value
+------------------------------------------------------------
+total_stock_value                       22.78      4.461e-06
+exercised_stock_options                 22.61      4.818e-06
+bonus                                   21.06      9.702e-06
+salary                                  18.58      3.034e-05
+ratio_from                              16.64      7.494e-05
+deferred_income                         11.56      8.743e-04
+long_term_incentive                     10.07      1.845e-03
+total_payments                           9.38      2.625e-03
+ratio_shared                             9.30      2.740e-03
+restricted_stock                         8.96      3.258e-03
+expenses                                 5.55      1.984e-02
+other                                    4.22      4.179e-02
+ratio_to                                 3.21      7.528e-02
+director_fees                            2.11      1.483e-01
+restricted_stock_deferred                0.76      3.842e-01
+deferral_payments                        0.22      6.388e-01
+
+Grid search of best estimator using: Naive Bayes, scoring: precision
+Pipeline(bay=GaussianNB(),
+     sel=SelectKBest(k=7, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=7, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 7}
+0.415
+make_scorer(precision_score)
+
+Grid search of best estimator using: Naive Bayes scaled, scoring: precision
+Pipeline(bay=GaussianNB(),
+     sel=SelectKBest(k=12, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=12, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 12}
+0.449318181818
+make_scorer(precision_score)
+
+Grid search of best estimator using: KNN, scoring: precision
+Pipeline(knn=KNeighborsClassifier(algorithm=auto, leaf_size=30, metric=minkowski,
+           n_neighbors=1, p=2, weights=uniform),
+     knn__algorithm=auto, knn__leaf_size=30, knn__metric=minkowski,
+     knn__n_neighbors=1, knn__p=2, knn__weights=uniform,
+     sel=SelectKBest(k=6, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=6, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 6, 'knn__n_neighbors': 1}
+0.4065
+make_scorer(precision_score)
+
+Grid search of best estimator using: KNN scaled, scoring: precision
+Pipeline(knn=KNeighborsClassifier(algorithm=auto, leaf_size=30, metric=minkowski,
+           n_neighbors=1, p=2, weights=uniform),
+     knn__algorithm=auto, knn__leaf_size=30, knn__metric=minkowski,
+     knn__n_neighbors=1, knn__p=2, knn__weights=uniform,
+     sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 15, 'knn__n_neighbors': 1}
+0.370666666667
+make_scorer(precision_score)
+
+Grid search of best estimator using: SVM scaled, scoring: precision
+Pipeline(sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f5c148aa1b8>,
+     svm=SVC(C=20, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.0,
+  kernel=linear, max_iter=-1, probability=False, random_state=None,
+  shrinking=True, tol=0.001, verbose=False),
+     svm__C=20, svm__cache_size=200, svm__class_weight=None,
+     svm__coef0=0.0, svm__degree=3, svm__gamma=0.0, svm__kernel=linear,
+     svm__max_iter=-1, svm__probability=False, svm__random_state=None,
+     svm__shrinking=True, svm__tol=0.001, svm__verbose=False)
+{'sel__k': 15, 'svm__C': 20, 'svm__kernel': 'linear'}
+0.43
+make_scorer(precision_score)
+
+Grid search of best estimator using: DecisionTree, scoring: precision
+Pipeline(sel=SelectKBest(k=4, score_func=<function f_classif at 0x7f9dc46a9230>),
+     sel__k=4, sel__score_func=<function f_classif at 0x7f9dc46a9230>,
+     tree=DecisionTreeClassifier(compute_importances=None, criterion=gini,
+            max_depth=None, max_features=None, min_density=None,
+            min_samples_leaf=1, min_samples_split=5, random_state=None,
+            splitter=best),
+     tree__compute_importances=None, tree__criterion=gini,
+     tree__max_depth=None, tree__max_features=None, tree__min_density=None,
+     tree__min_samples_leaf=1, tree__min_samples_split=5,
+     tree__random_state=None, tree__splitter=best)
+{'tree__min_samples_split': 5, 'sel__k': 4}
+0.309833333333
+make_scorer(precision_score)
+
+Grid search of best estimator using: DecisionTree, scoring: precision
+Pipeline(sel=SelectKBest(k=12, score_func=<function f_classif at 0x7f9dc46a9230>),
+     sel__k=12, sel__score_func=<function f_classif at 0x7f9dc46a9230>,
+     tree=DecisionTreeClassifier(compute_importances=None, criterion=gini,
+            max_depth=None, max_features=None, min_density=None,
+            min_samples_leaf=1, min_samples_split=5, random_state=None,
+            splitter=best),
+     tree__compute_importances=None, tree__criterion=gini,
+     tree__max_depth=None, tree__max_features=None, tree__min_density=None,
+     tree__min_samples_leaf=1, tree__min_samples_split=5,
+     tree__random_state=None, tree__splitter=best)
+{'tree__min_samples_split': 5, 'sel__k': 12}
+0.269428571429
+make_scorer(precision_score)
+
+Grid search of best estimator using: AdaBoost, scoring: precision
+Pipeline(ada=AdaBoostClassifier(algorithm=SAMME.R,
+          base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=1, random_state=None, splitter=best),
+          base_est...one, base_estimator__splitter=best,
+          learning_rate=1.0, n_estimators=50, random_state=None),
+     ada__algorithm=SAMME.R,
+     ada__base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=1, random_state=None, splitter=best),
+     ada__base_estimator__compute_importances=None,
+     ada__base_estimator__criterion=gini, ada__base_estimator__max_depth=1,
+     ada__base_estimator__max_features=None,
+     ada__base_estimator__min_density=None,
+     ada__base_estimator__min_samples_leaf=1,
+     ada__base_estimator__min_samples_split=1,
+     ada__base_estimator__random_state=None,
+     ada__base_estimator__splitter=best, ada__learning_rate=1.0,
+     ada__n_estimators=50, ada__random_state=None,
+     sel=SelectKBest(k=11, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=11, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'ada__base_estimator__min_samples_split': 1, 'sel__k': 11}
+0.412333333333
+make_scorer(precision_score)
+
+Grid search of best estimator using: AdaBoost scaled, scoring: precision
+Pipeline(ada=AdaBoostClassifier(algorithm=SAMME.R,
+          base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=10, random_state=None, splitter=best),
+          base_es...one, base_estimator__splitter=best,
+          learning_rate=1.0, n_estimators=50, random_state=None),
+     ada__algorithm=SAMME.R,
+     ada__base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=10, random_state=None, splitter=best),
+     ada__base_estimator__compute_importances=None,
+     ada__base_estimator__criterion=gini, ada__base_estimator__max_depth=1,
+     ada__base_estimator__max_features=None,
+     ada__base_estimator__min_density=None,
+     ada__base_estimator__min_samples_leaf=1,
+     ada__base_estimator__min_samples_split=10,
+     ada__base_estimator__random_state=None,
+     ada__base_estimator__splitter=best, ada__learning_rate=1.0,
+     ada__n_estimators=50, ada__random_state=None,
+     sel=SelectKBest(k=12, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=12, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'ada__base_estimator__min_samples_split': 10, 'sel__k': 12}
+0.403666666667
+make_scorer(precision_score)
+
+Grid search of best estimator using: Random Forest, scoring: precision
+Pipeline(rfor=RandomForestClassifier(bootstrap=True, compute_importances=None,
+            criterion=gini, max_depth=None, max_features=auto,
+            min_density=None, min_samples_leaf=1, min_samples_split=15,
+            n_estimators=10, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0),
+     rfor__bootstrap=True, rfor__compute_importances=None,
+     rfor__criterion=gini, rfor__max_depth=None, rfor__max_features=auto,
+     rfor__min_density=None, rfor__min_samples_leaf=1,
+     rfor__min_samples_split=15, rfor__n_estimators=10, rfor__n_jobs=1,
+     rfor__oob_score=False, rfor__random_state=None, rfor__verbose=0,
+     sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 15, 'rfor__min_samples_split': 15}
+0.355
+make_scorer(precision_score)
+
+Grid search of best estimator using: Random Forest scaled, scoring: precision
+Pipeline(rfor=RandomForestClassifier(bootstrap=True, compute_importances=None,
+            criterion=gini, max_depth=None, max_features=auto,
+            min_density=None, min_samples_leaf=1, min_samples_split=2,
+            n_estimators=10, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0),
+     rfor__bootstrap=True, rfor__compute_importances=None,
+     rfor__criterion=gini, rfor__max_depth=None, rfor__max_features=auto,
+     rfor__min_density=None, rfor__min_samples_leaf=1,
+     rfor__min_samples_split=2, rfor__n_estimators=10, rfor__n_jobs=1,
+     rfor__oob_score=False, rfor__random_state=None, rfor__verbose=0,
+     sel=SelectKBest(k=6, score_func=<function f_classif at 0x7f5c148aa1b8>),
+     sel__k=6, sel__score_func=<function f_classif at 0x7f5c148aa1b8>)
+{'sel__k': 6, 'rfor__min_samples_split': 2}
+0.351666666667
+make_scorer(precision_score)
+
+Grid search of best estimator using: Naive Bayes, scoring: recall
+Pipeline(bay=GaussianNB(),
+     sel=SelectKBest(k=14, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=14, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 14}
+0.99
+make_scorer(recall_score)
+
+Grid search of best estimator using: Naive Bayes scaled, scoring: recall
+Pipeline(bay=GaussianNB(),
+     sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 15}
+0.92
+make_scorer(recall_score)
+
+Grid search of best estimator using: KNN, scoring: recall
+Pipeline(knn=KNeighborsClassifier(algorithm=auto, leaf_size=30, metric=minkowski,
+           n_neighbors=1, p=2, weights=uniform),
+     knn__algorithm=auto, knn__leaf_size=30, knn__metric=minkowski,
+     knn__n_neighbors=1, knn__p=2, knn__weights=uniform,
+     sel=SelectKBest(k=6, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=6, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 6, 'knn__n_neighbors': 1}
+0.325
+make_scorer(recall_score)
+
+Grid search of best estimator using: KNN scaled, scoring: recall
+Pipeline(knn=KNeighborsClassifier(algorithm=auto, leaf_size=30, metric=minkowski,
+           n_neighbors=1, p=2, weights=uniform),
+     knn__algorithm=auto, knn__leaf_size=30, knn__metric=minkowski,
+     knn__n_neighbors=1, knn__p=2, knn__weights=uniform,
+     sel=SelectKBest(k=12, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=12, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 12, 'knn__n_neighbors': 1}
+0.365
+make_scorer(recall_score)
+
+Grid search of best estimator using: SVM scaled, scoring: recall
+Pipeline(sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f7d9fe221b8>,
+     svm=SVC(C=20, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.0,
+  kernel=linear, max_iter=-1, probability=False, random_state=None,
+  shrinking=True, tol=0.001, verbose=False),
+     svm__C=20, svm__cache_size=200, svm__class_weight=None,
+     svm__coef0=0.0, svm__degree=3, svm__gamma=0.0, svm__kernel=linear,
+     svm__max_iter=-1, svm__probability=False, svm__random_state=None,
+     svm__shrinking=True, svm__tol=0.001, svm__verbose=False)
+{'sel__k': 15, 'svm__C': 20, 'svm__kernel': 'linear'}
+0.24
+make_scorer(recall_score)
+
+Grid search of best estimator using: DecisionTree, scoring: recall
+Pipeline(sel=SelectKBest(k=3, score_func=<function f_classif at 0x7f039e258230>),
+     sel__k=3, sel__score_func=<function f_classif at 0x7f039e258230>,
+     tree=DecisionTreeClassifier(compute_importances=None, criterion=gini,
+            max_depth=None, max_features=None, min_density=None,
+            min_samples_leaf=1, min_samples_split=1, random_state=None,
+            splitter=best),
+     tree__compute_importances=None, tree__criterion=gini,
+     tree__max_depth=None, tree__max_features=None, tree__min_density=None,
+     tree__min_samples_leaf=1, tree__min_samples_split=1,
+     tree__random_state=None, tree__splitter=best)
+{'tree__min_samples_split': 1, 'sel__k': 3}
+0.325
+make_scorer(recall_score)
+
+Grid search of best estimator using: DecisionTree, scoring: recall
+Pipeline(sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f039e258230>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f039e258230>,
+     tree=DecisionTreeClassifier(compute_importances=None, criterion=gini,
+            max_depth=None, max_features=None, min_density=None,
+            min_samples_leaf=1, min_samples_split=1, random_state=None,
+            splitter=best),
+     tree__compute_importances=None, tree__criterion=gini,
+     tree__max_depth=None, tree__max_features=None, tree__min_density=None,
+     tree__min_samples_leaf=1, tree__min_samples_split=1,
+     tree__random_state=None, tree__splitter=best)
+{'tree__min_samples_split': 1, 'sel__k': 15}
+0.34
+make_scorer(recall_score)
+
+Grid search of best estimator using: AdaBoost, scoring: recall
+Pipeline(ada=AdaBoostClassifier(algorithm=SAMME.R,
+          base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=10, random_state=None, splitter=best),
+          base_es...one, base_estimator__splitter=best,
+          learning_rate=1.0, n_estimators=50, random_state=None),
+     ada__algorithm=SAMME.R,
+     ada__base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=10, random_state=None, splitter=best),
+     ada__base_estimator__compute_importances=None,
+     ada__base_estimator__criterion=gini, ada__base_estimator__max_depth=1,
+     ada__base_estimator__max_features=None,
+     ada__base_estimator__min_density=None,
+     ada__base_estimator__min_samples_leaf=1,
+     ada__base_estimator__min_samples_split=10,
+     ada__base_estimator__random_state=None,
+     ada__base_estimator__splitter=best, ada__learning_rate=1.0,
+     ada__n_estimators=50, ada__random_state=None,
+     sel=SelectKBest(k=15, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=15, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'ada__base_estimator__min_samples_split': 10, 'sel__k': 15}
+0.395
+make_scorer(recall_score)
+
+Grid search of best estimator using: AdaBoost scaled, scoring: recall
+Pipeline(ada=AdaBoostClassifier(algorithm=SAMME.R,
+          base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=1, random_state=None, splitter=best),
+          base_est...one, base_estimator__splitter=best,
+          learning_rate=1.0, n_estimators=50, random_state=None),
+     ada__algorithm=SAMME.R,
+     ada__base_estimator=DecisionTreeClassifier(compute_importances=None, criterion=gini, max_depth=1,
+            max_features=None, min_density=None, min_samples_leaf=1,
+            min_samples_split=1, random_state=None, splitter=best),
+     ada__base_estimator__compute_importances=None,
+     ada__base_estimator__criterion=gini, ada__base_estimator__max_depth=1,
+     ada__base_estimator__max_features=None,
+     ada__base_estimator__min_density=None,
+     ada__base_estimator__min_samples_leaf=1,
+     ada__base_estimator__min_samples_split=1,
+     ada__base_estimator__random_state=None,
+     ada__base_estimator__splitter=best, ada__learning_rate=1.0,
+     ada__n_estimators=50, ada__random_state=None,
+     sel=SelectKBest(k=14, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=14, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'ada__base_estimator__min_samples_split': 1, 'sel__k': 14}
+0.34
+make_scorer(recall_score)
+
+Grid search of best estimator using: Random Forest, scoring: recall
+Pipeline(rfor=RandomForestClassifier(bootstrap=True, compute_importances=None,
+            criterion=gini, max_depth=None, max_features=auto,
+            min_density=None, min_samples_leaf=1, min_samples_split=15,
+            n_estimators=10, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0),
+     rfor__bootstrap=True, rfor__compute_importances=None,
+     rfor__criterion=gini, rfor__max_depth=None, rfor__max_features=auto,
+     rfor__min_density=None, rfor__min_samples_leaf=1,
+     rfor__min_samples_split=15, rfor__n_estimators=10, rfor__n_jobs=1,
+     rfor__oob_score=False, rfor__random_state=None, rfor__verbose=0,
+     sel=SelectKBest(k=9, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=9, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 9, 'rfor__min_samples_split': 15}
+0.215
+make_scorer(recall_score)
+
+Grid search of best estimator using: Random Forest scaled, scoring: recall
+Pipeline(rfor=RandomForestClassifier(bootstrap=True, compute_importances=None,
+            criterion=gini, max_depth=None, max_features=auto,
+            min_density=None, min_samples_leaf=1, min_samples_split=15,
+            n_estimators=10, n_jobs=1, oob_score=False, random_state=None,
+            verbose=0),
+     rfor__bootstrap=True, rfor__compute_importances=None,
+     rfor__criterion=gini, rfor__max_depth=None, rfor__max_features=auto,
+     rfor__min_density=None, rfor__min_samples_leaf=1,
+     rfor__min_samples_split=15, rfor__n_estimators=10, rfor__n_jobs=1,
+     rfor__oob_score=False, rfor__random_state=None, rfor__verbose=0,
+     sel=SelectKBest(k=11, score_func=<function f_classif at 0x7f7d9fe221b8>),
+     sel__k=11, sel__score_func=<function f_classif at 0x7f7d9fe221b8>)
+{'sel__k': 11, 'rfor__min_samples_split': 15}
+0.23
+make_scorer(recall_score)
+
+Get scores by k-best for: Naive Bayes
+    k       accuracy      precision         recall             f1
+    1        0.83600        0.25532        0.12000        0.16327
+    2        0.82000        0.26027        0.19000        0.21965
+    3        0.81333        0.25309        0.20500        0.22652
+    4        0.84000        0.35915        0.25500        0.29825
+    5        0.84333        0.38411        0.29000        0.33048
+    6        0.85600        0.44521        0.32500        0.37572
+    7        0.85200        0.42466        0.31000        0.35838
+    8        0.84467        0.37956        0.26000        0.30861
+    9        0.84200        0.37908        0.29000        0.32861
+   10        0.83600        0.36471        0.31000        0.33514
+   11        0.81267        0.31336        0.34000        0.32614
+   12        0.82467        0.35349        0.38000        0.36627
+   13        0.69467        0.21711        0.49500        0.30183
+   14        0.25467        0.15122        0.99500        0.26253
+   15        0.30933        0.15282        0.92000        0.26211
+   16        0.30733        0.14718        0.87500        0.25198
+
+Get scores by k-best for: Naive Bayes scaled
+    k       accuracy      precision         recall             f1
+    1        0.83667        0.26316        0.12500        0.16949
+    2        0.82533        0.24167        0.14500        0.18125
+    3        0.84267        0.35714        0.22500        0.27607
+    4        0.83867        0.34559        0.23500        0.27976
+    5        0.83533        0.35220        0.28000        0.31198
+    6        0.83333        0.34177        0.27000        0.30168
+    7        0.83733        0.36250        0.29000        0.32222
+    8        0.82467        0.30435        0.24500        0.27147
+    9        0.83067        0.33125        0.26500        0.29444
+   10        0.83867        0.37791        0.32500        0.34946
+   11        0.83400        0.35673        0.30500        0.32884
+   12        0.84467        0.40237        0.34000        0.36856
+   13        0.80333        0.31373        0.40000        0.35165
+   14        0.69600        0.24603        0.62000        0.35227
+   15        0.37667        0.16922        0.94000        0.28680
+   16        0.34200        0.15872        0.91500        0.27051
+
+Get scores by k-best for: KNN(1)
+    k       accuracy      precision         recall             f1
+    1        0.79667        0.20339        0.18000        0.19098
+    2        0.79200        0.19231        0.17500        0.18325
+    3        0.83000        0.33918        0.29000        0.31267
+    4        0.82933        0.35859        0.35500        0.35678
+    5        0.84533        0.41304        0.38000        0.39583
+    6        0.84867        0.41290        0.32000        0.36056
+    7        0.82733        0.33333        0.29500        0.31300
+    8        0.81600        0.29570        0.27500        0.28497
+    9        0.81733        0.27711        0.23000        0.25137
+   10        0.80267        0.20732        0.17000        0.18681
+   11        0.78733        0.15205        0.13000        0.14016
+   12        0.79600        0.14189        0.10500        0.12069
+   13        0.80333        0.18954        0.14500        0.16431
+   14        0.78733        0.13497        0.11000        0.12121
+   15        0.79467        0.14000        0.10500        0.12000
+   16        0.82200        0.26897        0.19500        0.22609
+
+Get scores by k-best for: KNN(1) scaled
+    k       accuracy      precision         recall             f1
+    1        0.76667        0.15596        0.17000        0.16268
+    2        0.79267        0.20000        0.18500        0.19221
+    3        0.81533        0.29412        0.27500        0.28424
+    4        0.80667        0.29358        0.32000        0.30622
+    5        0.78667        0.19388        0.19000        0.19192
+    6        0.81400        0.28649        0.26500        0.27532
+    7        0.80000        0.18354        0.14500        0.16201
+    8        0.79200        0.15854        0.13000        0.14286
+    9        0.79200        0.16265        0.13500        0.14754
+   10        0.80933        0.23780        0.19500        0.21429
+   11        0.83133        0.34857        0.30500        0.32533
+   12        0.83600        0.36782        0.32000        0.34225
+   13        0.84133        0.38415        0.31500        0.34615
+   14        0.83600        0.35976        0.29500        0.32418
+   15        0.83333        0.34940        0.29000        0.31694
+   16        0.83867        0.37931        0.33000        0.35294
+
+Get scores by k-best for: KNN(2)
+    k       accuracy      precision         recall             f1
+    1        0.84333        0.18182        0.05000        0.07843
+    2        0.86133        0.42308        0.11000        0.17460
+    3        0.86133        0.41304        0.09500        0.15447
+    4        0.87600        0.63462        0.16500        0.26190
+    5        0.87467        0.64286        0.13500        0.22314
+    6        0.87400        0.62222        0.14000        0.22857
+    7        0.86400        0.46296        0.12500        0.19685
+    8        0.86333        0.44898        0.11000        0.17671
+    9        0.86000        0.41935        0.13000        0.19847
+   10        0.85333        0.32759        0.09500        0.14729
+   11        0.86133        0.43103        0.12500        0.19380
+   12        0.85867        0.30000        0.04500        0.07826
+   13        0.85667        0.28571        0.05000        0.08511
+   14        0.85733        0.26667        0.04000        0.06957
+   15        0.86067        0.38462        0.07500        0.12552
+   16        0.86400        0.40909        0.04500        0.08108
+
+Get scores by k-best for: KNN(2) scaled
+    k       accuracy      precision         recall             f1
+    1        0.84200        0.19672        0.06000        0.09195
+    2        0.86467        0.47541        0.14500        0.22222
+    3        0.87200        0.59524        0.12500        0.20661
+    4        0.87067        0.56522        0.13000        0.21138
+    5        0.85533        0.22581        0.03500        0.06061
+    6        0.85000        0.12121        0.02000        0.03433
+    7        0.84933        0.06667        0.01000        0.01739
+    8        0.84800        0.08824        0.01500        0.02564
+    9        0.84733        0.10811        0.02000        0.03376
+   10        0.86000        0.32143        0.04500        0.07895
+   11        0.86067        0.36364        0.06000        0.10300
+   12        0.85467        0.26316        0.05000        0.08403
+   13        0.85600        0.26471        0.04500        0.07692
+   14        0.86133        0.30000        0.03000        0.05455
+   15        0.85133        0.21951        0.04500        0.07469
+   16        0.86600        0.46154        0.03000        0.05634
+
+Get scores by k-best for: SVC (C=10,  kernel=linear)
+    k       accuracy      precision         recall             f1
+    1        0.86067        0.00000        0.00000            nan
+    2        0.86267        0.12500        0.00500        0.00962
+    3        0.86200        0.11111        0.00500        0.00957
+    4        0.86333        0.42857        0.07500        0.12766
+    5        0.85800        0.29032        0.04500        0.07792
+    6        0.85267        0.25581        0.05500        0.09053
+    7        0.85533        0.30233        0.06500        0.10700
+    8        0.85933        0.36585        0.07500        0.12448
+    9        0.86067        0.39535        0.08500        0.13992
+   10        0.85800        0.36735        0.09000        0.14458
+   11        0.85533        0.29268        0.06000        0.09959
+   12        0.86667        0.50000        0.14500        0.22481
+   13        0.86467        0.46939        0.11500        0.18474
+   14        0.86200        0.45205        0.16500        0.24176
+   15        0.87933        0.64179        0.21500        0.32210
+   16        0.88867        0.85106        0.20000        0.32389
+
+Get scores by k-best for: SVC (C=10,  kernel=rbf)
+    k       accuracy      precision         recall             f1
+    1        0.85533        0.25714        0.04500        0.07660
+    2        0.86600        0.47368        0.04500        0.08219
+    3        0.86133        0.30000        0.03000        0.05455
+    4        0.86667        0.50000        0.05000        0.09091
+    5        0.85867        0.28571        0.04000        0.07018
+    6        0.86200        0.31579        0.03000        0.05479
+    7        0.85867        0.31250        0.05000        0.08621
+    8        0.86067        0.30435        0.03500        0.06278
+    9        0.86333        0.27273        0.01500        0.02844
+   10        0.86400        0.42308        0.05500        0.09735
+   11        0.86200        0.34783        0.04000        0.07175
+   12        0.86200        0.18182        0.01000        0.01896
+   13        0.85667        0.17391        0.02000        0.03587
+   14        0.86200        0.26667        0.02000        0.03721
+   15        0.86867        0.54286        0.09500        0.16170
+   16        0.86933        0.62500        0.05000        0.09259
+
+Get scores by k-best for: SVC (C=10,  kernel=poly 2)
+    k       accuracy      precision         recall             f1
+    1        0.86200        0.38710        0.06000        0.10390
+    2        0.86867        0.63636        0.03500        0.06635
+    3        0.87133        0.88889        0.04000        0.07656
+    4        0.87067        1.00000        0.03000        0.05825
+    5        0.87800        0.94737        0.09000        0.16438
+    6        0.87200        0.90000        0.04500        0.08571
+    7        0.86933        1.00000        0.02000        0.03922
+    8        0.86867        1.00000        0.01500        0.02956
+    9        0.86867        1.00000        0.01500        0.02956
+   10        0.86733        1.00000        0.00500        0.00995
+   11        0.86667            nan        0.00000            nan
+   12        0.86733        1.00000        0.00500        0.00995
+   13        0.86667            nan        0.00000            nan
+   14        0.86667            nan        0.00000            nan
+   15        0.86667            nan        0.00000            nan
+   16        0.86667            nan        0.00000            nan
+
+Get scores by k-best for: Decision Tree (1)
+    k       accuracy      precision         recall             f1
+    1        0.80400        0.19481        0.15000        0.16949
+    2        0.80133        0.23936        0.22500        0.23196
+    3        0.79467        0.25676        0.28500        0.27014
+    4        0.79533        0.25116        0.27000        0.26024
+    5        0.78867        0.24675        0.28500        0.26450
+    6        0.79467        0.25676        0.28500        0.27014
+    7        0.79733        0.21739        0.20000        0.20833
+    8        0.79467        0.25676        0.28500        0.27014
+    9        0.79533        0.22843        0.22500        0.22670
+   10        0.78733        0.22326        0.24000        0.23133
+   11        0.79733        0.22340        0.21000        0.21649
+   12        0.80800        0.27083        0.26000        0.26531
+   13        0.79533        0.25792        0.28500        0.27078
+   14        0.78867        0.22791        0.24500        0.23614
+   15        0.80533        0.29825        0.34000        0.31776
+   16        0.79000        0.23256        0.25000        0.24096
+
+Get scores by k-best for: Decision Tree (2)
+    k       accuracy      precision         recall             f1
+    1        0.82600        0.25203        0.15500        0.19195
+    2        0.80267        0.22414        0.19500        0.20856
+    3        0.81467        0.29032        0.27000        0.27979
+    4        0.81467        0.29474        0.28000        0.28718
+    5        0.79867        0.21348        0.19000        0.20106
+    6        0.82400        0.30723        0.25500        0.27869
+    7        0.81133        0.23567        0.18500        0.20728
+    8        0.81533        0.28000        0.24500        0.26133
+    9        0.81667        0.24490        0.18000        0.20749
+   10        0.81400        0.27429        0.24000        0.25600
+   11        0.79200        0.19892        0.18500        0.19171
+   12        0.81400        0.26061        0.21500        0.23562
+   13        0.80267        0.24737        0.23500        0.24103
+   14        0.79933        0.24876        0.25000        0.24938
+   15        0.81000        0.27749        0.26500        0.27110
+   16        0.79933        0.22404        0.20500        0.21410
+
+Get scores by k-best for: Decision Tree (5)
+    k       accuracy      precision         recall             f1
+    1        0.82800        0.24561        0.14000        0.17834
+    2        0.81200        0.25301        0.21000        0.22951
+    3        0.82800        0.30405        0.22500        0.25862
+    4        0.82667        0.31928        0.26500        0.28962
+    5        0.82000        0.27273        0.21000        0.23729
+    6        0.83067        0.29231        0.19000        0.23030
+    7        0.81933        0.24823        0.17500        0.20528
+    8        0.81467        0.23649        0.17500        0.20115
+    9        0.82200        0.26573        0.19000        0.22157
+   10        0.81067        0.22727        0.17500        0.19774
+   11        0.81667        0.25806        0.20000        0.22535
+   12        0.80267        0.20000        0.16000        0.17778
+   13        0.82467        0.31138        0.26000        0.28338
+   14        0.81333        0.26471        0.22500        0.24324
+   15        0.80733        0.22013        0.17500        0.19499
+   16        0.81200        0.28191        0.26500        0.27320
+
+Get scores by k-best for: Decision Tree (10)
+    k       accuracy      precision         recall             f1
+    1        0.83133        0.22680        0.11000        0.14815
+    2        0.81733        0.21094        0.13500        0.16463
+    3        0.82400        0.26471        0.18000        0.21429
+    4        0.82533        0.31325        0.26000        0.28415
+    5        0.82467        0.27338        0.19000        0.22419
+    6        0.81933        0.29944        0.26500        0.28117
+    7        0.82800        0.32530        0.27000        0.29508
+    8        0.82600        0.30818        0.24500        0.27298
+    9        0.81267        0.23871        0.18500        0.20845
+   10        0.80933        0.24096        0.20000        0.21858
+   11        0.82133        0.25714        0.18000        0.21176
+   12        0.81800        0.23358        0.16000        0.18991
+   13        0.81800        0.26144        0.20000        0.22663
+   14        0.81333        0.26190        0.22000        0.23913
+   15        0.81200        0.24051        0.19000        0.21229
+   16        0.80733        0.25140        0.22500        0.23747
+
+Get scores by k-best for: AdaBoost()
+    k       accuracy      precision         recall             f1
+    1        0.83733        0.27083        0.13000        0.17568
+    2        0.82267        0.25735        0.17500        0.20833
+    3        0.81333        0.25904        0.21500        0.23497
+    4        0.82600        0.28369        0.20000        0.23460
+    5        0.82067        0.28834        0.23500        0.25895
+    6        0.82667        0.28873        0.20500        0.23977
+    7        0.81667        0.28814        0.25500        0.27056
+    8        0.83533        0.34014        0.25000        0.28818
+    9        0.84200        0.36090        0.24000        0.28829
+   10        0.82867        0.30872        0.23000        0.26361
+   11        0.83133        0.30657        0.21000        0.24926
+   12        0.85933        0.46584        0.37500        0.41551
+   13        0.86000        0.46622        0.34500        0.39655
+   14        0.85267        0.44134        0.39500        0.41689
+   15        0.84667        0.41071        0.34500        0.37500
+   16        0.83533        0.36872        0.33000        0.34828
+
+Get scores by k-best for: AdaBoost(5)
+    k       accuracy      precision         recall             f1
+    1        0.78800        0.18280        0.17000        0.17617
+    2        0.79800        0.20904        0.18500        0.19629
+    3        0.81867        0.29070        0.25000        0.26882
+    4        0.83133        0.31973        0.23500        0.27089
+    5        0.82800        0.30137        0.22000        0.25434
+    6        0.83800        0.34965        0.25000        0.29155
+    7        0.84133        0.36232        0.25000        0.29586
+    8        0.84000        0.33607        0.20500        0.25466
+    9        0.84333        0.34783        0.20000        0.25397
+   10        0.82867        0.24779        0.14000        0.17891
+   11        0.83800        0.29524        0.15500        0.20328
+   12        0.85800        0.43689        0.22500        0.29703
+   13        0.83600        0.29091        0.16000        0.20645
+   14        0.84533        0.35185        0.19000        0.24675
+   15        0.83800        0.32231        0.19500        0.24299
+   16        0.85000        0.39316        0.23000        0.29022
+
+Get scores by k-best for: AdaBoost(10)
+    k       accuracy      precision         recall             f1
+    1        0.80800        0.23171        0.19000        0.20879
+    2        0.79933        0.20809        0.18000        0.19303
+    3        0.83800        0.36970        0.30500        0.33425
+    4        0.81467        0.28090        0.25000        0.26455
+    5        0.82933        0.32278        0.25500        0.28492
+    6        0.84400        0.37313        0.25000        0.29940
+    7        0.85067        0.41429        0.29000        0.34118
+    8        0.85733        0.44355        0.27500        0.33951
+    9        0.84600        0.37984        0.24500        0.29787
+   10        0.85333        0.40196        0.20500        0.27152
+   11        0.85933        0.44444        0.22000        0.29431
+   12        0.84933        0.37500        0.19500        0.25658
+   13        0.85533        0.40860        0.19000        0.25939
+   14        0.86000        0.45370        0.24500        0.31818
+   15        0.84333        0.33333        0.17500        0.22951
+   16        0.84867        0.37143        0.19500        0.25574
+
+Get scores by k-best for: AdaBoost(15)
+    k       accuracy      precision         recall             f1
+    1        0.81667        0.25166        0.19000        0.21652
+    2        0.79133        0.20419        0.19500        0.19949
+    3        0.82733        0.34392        0.32500        0.33419
+    4        0.83467        0.33562        0.24500        0.28324
+    5        0.83600        0.36145        0.30000        0.32787
+    6        0.84267        0.38000        0.28500        0.32571
+    7        0.84867        0.40690        0.29500        0.34203
+    8        0.85200        0.40000        0.22000        0.28387
+    9        0.84800        0.39062        0.25000        0.30488
+   10        0.85267        0.40000        0.21000        0.27541
+   11        0.84467        0.36134        0.21500        0.26959
+   12        0.86200        0.46729        0.25000        0.32573
+   13        0.85133        0.40945        0.26000        0.31804
+   14        0.85000        0.38532        0.21000        0.27184
+   15        0.84333        0.37226        0.25500        0.30267
+   16        0.84733        0.39716        0.28000        0.32845
+
+Get scores by k-best for: RandomForest()
+    k       accuracy      precision         recall             f1
+    1        0.79867        0.19277        0.16000        0.17486
+    2        0.82600        0.24370        0.14500        0.18182
+    3        0.84933        0.35556        0.16000        0.22069
+    4        0.85000        0.37374        0.18500        0.24749
+    5        0.85067        0.36364        0.16000        0.22222
+    6        0.86800        0.51471        0.17500        0.26119
+    7        0.85667        0.40741        0.16500        0.23488
+    8        0.85600        0.40476        0.17000        0.23944
+    9        0.85800        0.42169        0.17500        0.24735
+   10        0.85467        0.40426        0.19000        0.25850
+   11        0.85667        0.39726        0.14500        0.21245
+   12        0.85467        0.39024        0.16000        0.22695
+   13        0.86333        0.46575        0.17000        0.24908
+   14        0.86267        0.45161        0.14000        0.21374
+   15        0.86467        0.47826        0.16500        0.24535
+   16        0.86600        0.49123        0.14000        0.21790
+
+Get scores by k-best for: RandomForest(5)
+    k       accuracy      precision         recall             f1
+    1        0.81733        0.20161        0.12500        0.15432
+    2        0.82800        0.28986        0.20000        0.23669
+    3        0.84467        0.36364        0.22000        0.27414
+    4        0.85200        0.38043        0.17500        0.23973
+    5        0.85000        0.36264        0.16500        0.22680
+    6        0.85333        0.40000        0.20000        0.26667
+    7        0.85200        0.36905        0.15500        0.21831
+    8        0.86400        0.47500        0.19000        0.27143
+    9        0.85733        0.42708        0.20500        0.27703
+   10        0.86667        0.50000        0.21000        0.29577
+   11        0.85467        0.40426        0.19000        0.25850
+   12        0.86400        0.48039        0.24500        0.32450
+   13        0.86600        0.49425        0.21500        0.29965
+   14        0.86400        0.47561        0.19500        0.27660
+   15        0.85733        0.41026        0.16000        0.23022
+   16        0.86267        0.47000        0.23500        0.31333
+
+Get scores by k-best for: RandomForest(10)
+    k       accuracy      precision         recall             f1
+    1        0.82600        0.21495        0.11500        0.14984
+    2        0.85333        0.38372        0.16500        0.23077
+    3        0.85733        0.42045        0.18500        0.25694
+    4        0.85400        0.36232        0.12500        0.18587
+    5        0.86133        0.45349        0.19500        0.27273
+    6        0.86133        0.45833        0.22000        0.29730
+    7        0.85400        0.38554        0.16000        0.22615
+    8        0.85000        0.34568        0.14000        0.19929
+    9        0.86200        0.45977        0.20000        0.27875
+   10        0.85400        0.39785        0.18500        0.25256
+   11        0.86867        0.51807        0.21500        0.30389
+   12        0.86600        0.49315        0.18000        0.26374
+   13        0.86600        0.49425        0.21500        0.29965
+   14        0.85733        0.40541        0.15000        0.21898
+   15        0.87133        0.54217        0.22500        0.31802
+   16        0.86400        0.47297        0.17500        0.25547
+
+Get scores by k-best for: RandomForest(15)
+    k       accuracy      precision         recall             f1
+    1        0.83067        0.17073        0.07000        0.09929
+    2        0.84867        0.34118        0.14500        0.20351
+    3        0.86067        0.43836        0.16000        0.23443
+    4        0.85467        0.39535        0.17000        0.23776
+    5        0.84600        0.31765        0.13500        0.18947
+    6        0.85333        0.35294        0.12000        0.17910
+    7        0.86467        0.47945        0.17500        0.25641
+    8        0.85400        0.38272        0.15500        0.22064
+    9        0.87000        0.52874        0.23000        0.32056
+   10        0.86800        0.51282        0.20000        0.28777
+   11        0.86400        0.47561        0.19500        0.27660
+   12        0.86200        0.46154        0.21000        0.28866
+   13        0.87200        0.55556        0.20000        0.29412
+   14        0.86600        0.49254        0.16500        0.24719
+   15        0.87200        0.57692        0.15000        0.23810
+   16        0.85800        0.42353        0.18000        0.25263
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: Naive Bayes, scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.84946        0.52392        0.23550        0.32494  ['bonus']
+    2        0.84115        0.47373        0.29300        0.36206  ['bonus', 'deferred_income']
+    3        0.85014        0.46680        0.34450        0.39643  ['bonus', 'deferred_income', 'ratio_shared']
+    4        0.84579        0.44794        0.34200        0.38787  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to']
+    5        0.84257        0.43503        0.34150        0.38263  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive']
+    6        0.84786        0.45839        0.35800        0.40202  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses']
+    7        0.84773        0.41782        0.36100        0.38734  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary']
+    8        0.84013        0.39370        0.36850        0.38068  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments']
+    9        0.86113        0.47152        0.34350        0.39745  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value']
+   10        0.25207        0.15050        0.99250        0.26137  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other']
+   11        0.24760        0.14606        0.95800        0.25347  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock']
+   12        0.24760        0.14606        0.95800        0.25347  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options']
+   13        0.24820        0.14664        0.96250        0.25451  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from']
+   14        0.24847        0.14685        0.96400        0.25487  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments']
+   15        0.24940        0.14137        0.91250        0.24482  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments', 'restricted_stock_deferred']
+   16        0.33100        0.15689        0.91850        0.26800  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments', 'restricted_stock_deferred', 'director_fees']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: Naive Bayes, scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.84946        0.52392        0.23550        0.32494  ['bonus']
+    2        0.84115        0.47373        0.29300        0.36206  ['bonus', 'deferred_income']
+    3        0.85014        0.46680        0.34450        0.39643  ['bonus', 'deferred_income', 'ratio_shared']
+    4        0.84579        0.44794        0.34200        0.38787  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to']
+    5        0.84257        0.43503        0.34150        0.38263  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive']
+    6        0.84786        0.45839        0.35800        0.40202  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses']
+    7        0.84773        0.41782        0.36100        0.38734  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary']
+    8        0.84013        0.39370        0.36850        0.38068  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments']
+    9        0.86113        0.47152        0.34350        0.39745  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value']
+   10        0.25207        0.15050        0.99250        0.26137  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other']
+   11        0.24760        0.14606        0.95800        0.25347  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock']
+   12        0.24760        0.14606        0.95800        0.25347  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options']
+   13        0.24820        0.14664        0.96250        0.25451  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from']
+   14        0.24847        0.14685        0.96400        0.25487  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments']
+   15        0.24940        0.14137        0.91250        0.24482  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments', 'restricted_stock_deferred']
+   16        0.33100        0.15689        0.91850        0.26800  ['bonus', 'deferred_income', 'ratio_shared', 'ratio_to', 'long_term_incentive', 'expenses', 'salary', 'total_payments', 'total_stock_value', 'other', 'restricted_stock', 'exercised_stock_options', 'ratio_from', 'deferral_payments', 'restricted_stock_deferred', 'director_fees']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: KNN(1), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76646        0.24280        0.24450        0.24365  ['director_fees']
+    2        0.79029        0.26530        0.26450        0.26490  ['director_fees', 'restricted_stock_deferred']
+    3        0.79771        0.28265        0.27050        0.27644  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.80793        0.31082        0.28300        0.29626  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared']
+    5        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to']
+    6        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other']
+    7        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses']
+    8        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from']
+    9        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary']
+   10        0.81320        0.29436        0.28700        0.29063  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income']
+   11        0.81493        0.27176        0.23100        0.24973  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments']
+   12        0.80967        0.22649        0.17700        0.19871  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options']
+   13        0.85187        0.43657        0.38200        0.40747  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value']
+   14        0.82073        0.29083        0.23950        0.26268  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock']
+   15        0.81293        0.24134        0.18800        0.21135  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock', 'long_term_incentive']
+   16        0.80840        0.22958        0.18550        0.20520  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock', 'long_term_incentive', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: KNN(1), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76646        0.24280        0.24450        0.24365  ['director_fees']
+    2        0.79029        0.26530        0.26450        0.26490  ['director_fees', 'restricted_stock_deferred']
+    3        0.79771        0.28265        0.27050        0.27644  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.80793        0.31082        0.28300        0.29626  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared']
+    5        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to']
+    6        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other']
+    7        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses']
+    8        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from']
+    9        0.81307        0.29363        0.28600        0.28977  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary']
+   10        0.81320        0.29436        0.28700        0.29063  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income']
+   11        0.81493        0.27176        0.23100        0.24973  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments']
+   12        0.80967        0.22649        0.17700        0.19871  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options']
+   13        0.85187        0.43657        0.38200        0.40747  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value']
+   14        0.82073        0.29083        0.23950        0.26268  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock']
+   15        0.81293        0.24134        0.18800        0.21135  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock', 'long_term_incentive']
+   16        0.80840        0.22958        0.18550        0.20520  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_shared', 'ratio_to', 'other', 'expenses', 'ratio_from', 'salary', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'total_stock_value', 'restricted_stock', 'long_term_incentive', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: KNN(2), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.83077        0.27169        0.05950        0.09762  ['exercised_stock_options']
+    2        0.84938        0.55000        0.11550        0.19091  ['exercised_stock_options', 'other']
+    3        0.84108        0.43125        0.10350        0.16694  ['exercised_stock_options', 'other', 'director_fees']
+    4        0.86280        0.44336        0.11350        0.18073  ['exercised_stock_options', 'other', 'director_fees', 'expenses']
+    5        0.86433        0.46493        0.11600        0.18567  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary']
+    6        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared']
+    7        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from']
+    8        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to']
+    9        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments']
+   10        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred']
+   11        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus']
+   12        0.87607        0.59916        0.21300        0.31428  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income']
+   13        0.86793        0.52235        0.11100        0.18309  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive']
+   14        0.86833        0.52998        0.11050        0.18287  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock']
+   15        0.86320        0.44737        0.11050        0.17723  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock', 'total_stock_value']
+   16        0.86147        0.38393        0.06450        0.11045  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock', 'total_stock_value', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: KNN(2), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.83077        0.27169        0.05950        0.09762  ['exercised_stock_options']
+    2        0.84938        0.55000        0.11550        0.19091  ['exercised_stock_options', 'other']
+    3        0.84108        0.43125        0.10350        0.16694  ['exercised_stock_options', 'other', 'director_fees']
+    4        0.86280        0.44336        0.11350        0.18073  ['exercised_stock_options', 'other', 'director_fees', 'expenses']
+    5        0.86433        0.46493        0.11600        0.18567  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary']
+    6        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared']
+    7        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from']
+    8        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to']
+    9        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments']
+   10        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred']
+   11        0.86487        0.47348        0.12050        0.19211  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus']
+   12        0.87607        0.59916        0.21300        0.31428  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income']
+   13        0.86793        0.52235        0.11100        0.18309  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive']
+   14        0.86833        0.52998        0.11050        0.18287  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock']
+   15        0.86320        0.44737        0.11050        0.17723  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock', 'total_stock_value']
+   16        0.86147        0.38393        0.06450        0.11045  ['exercised_stock_options', 'other', 'director_fees', 'expenses', 'salary', 'ratio_shared', 'ratio_from', 'ratio_to', 'deferral_payments', 'restricted_stock_deferred', 'bonus', 'deferred_income', 'long_term_incentive', 'restricted_stock', 'total_stock_value', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.83892        0.41696        0.11800        0.18394  ['director_fees']
+    2        0.85064        0.42059        0.12050        0.18733  ['director_fees', 'bonus']
+    3        0.82221        0.29710        0.17900        0.22340  ['director_fees', 'bonus', 'restricted_stock_deferred']
+    4        0.82979        0.33646        0.19700        0.24850  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses']
+    5        0.86113        0.47055        0.33150        0.38897  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared']
+    6        0.87607        0.54839        0.39950        0.46225  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value']
+    7        0.86993        0.51657        0.38200        0.43921  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income']
+    8        0.88200        0.58358        0.40150        0.47571  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments']
+    9        0.87760        0.55891        0.38900        0.45873  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options']
+   10        0.87660        0.54970        0.41200        0.47099  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from']
+   11        0.87513        0.54425        0.39050        0.45473  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary']
+   12        0.86507        0.49151        0.34750        0.40715  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary', 'ratio_to']
+   13        0.85913        0.46138        0.33750        0.38984  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary', 'ratio_to', 'other']
+   14        0.85913        0.46376        0.36150        0.40629  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary', 'ratio_to', 'other', 'long_term_incentive']
+   15        0.85393        0.43997        0.35000        0.38986  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary', 'ratio_to', 'other', 'long_term_incentive', 'restricted_stock']
+   16        0.84780        0.40900        0.31800        0.35781  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'salary', 'ratio_to', 'other', 'long_term_incentive', 'restricted_stock', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.83892        0.41696        0.11800        0.18394  ['director_fees']
+    2        0.85057        0.41986        0.12050        0.18726  ['director_fees', 'bonus']
+    3        0.82221        0.29676        0.17850        0.22292  ['director_fees', 'bonus', 'restricted_stock_deferred']
+    4        0.82979        0.33674        0.19750        0.24898  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses']
+    5        0.86120        0.47088        0.33150        0.38908  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared']
+    6        0.87587        0.54726        0.39950        0.46185  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value']
+    7        0.86987        0.51624        0.38150        0.43876  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income']
+    8        0.88187        0.58261        0.40200        0.47574  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments']
+    9        0.87767        0.55922        0.38950        0.45918  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options']
+   10        0.87587        0.54563        0.41250        0.46982  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from']
+   11        0.87593        0.54864        0.39200        0.45728  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive']
+   12        0.86733        0.50345        0.36500        0.42319  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive', 'ratio_to']
+   13        0.86333        0.48252        0.34500        0.40233  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive', 'ratio_to', 'other']
+   14        0.85653        0.45141        0.35300        0.39618  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive', 'ratio_to', 'other', 'salary']
+   15        0.85427        0.44136        0.35000        0.39041  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive', 'ratio_to', 'other', 'salary', 'total_payments']
+   16        0.84773        0.40862        0.31750        0.35734  ['director_fees', 'bonus', 'restricted_stock_deferred', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'deferral_payments', 'exercised_stock_options', 'ratio_from', 'long_term_incentive', 'ratio_to', 'other', 'salary', 'total_payments', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(5), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24314        0.24350        0.24332  ['director_fees']
+    2        0.79057        0.26512        0.26300        0.26406  ['director_fees', 'restricted_stock_deferred']
+    3        0.80157        0.28461        0.25700        0.27010  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.82271        0.37616        0.36600        0.37101  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.84920        0.41761        0.33200        0.36992  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.86193        0.47395        0.32300        0.38418  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options']
+    7        0.85980        0.46222        0.31500        0.37467  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared']
+    8        0.87293        0.53426        0.36650        0.43476  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses']
+    9        0.87193        0.53224        0.32600        0.40434  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments']
+   10        0.86627        0.49747        0.29550        0.37077  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income']
+   11        0.86380        0.48239        0.29450        0.36572  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary']
+   12        0.85933        0.44926        0.24350        0.31582  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_stock_value']
+   13        0.85313        0.40541        0.21750        0.28311  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_stock_value', 'other']
+   14        0.84620        0.35395        0.18600        0.24385  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_stock_value', 'other', 'ratio_from']
+   15        0.84640        0.35714        0.19000        0.24804  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_stock_value', 'other', 'ratio_from', 'total_payments']
+   16        0.84093        0.31996        0.17150        0.22331  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_stock_value', 'other', 'ratio_from', 'total_payments', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(5), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24314        0.24350        0.24332  ['director_fees']
+    2        0.79057        0.26536        0.26350        0.26443  ['director_fees', 'restricted_stock_deferred']
+    3        0.80136        0.28413        0.25700        0.26989  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.82229        0.37576        0.36900        0.37235  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.84947        0.41887        0.33300        0.37103  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.86173        0.47243        0.31700        0.37941  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options']
+    7        0.85993        0.46311        0.31700        0.37637  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared']
+    8        0.87173        0.52790        0.35950        0.42772  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses']
+    9        0.87180        0.53206        0.31950        0.39925  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments']
+   10        0.86547        0.49272        0.30450        0.37639  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income']
+   11        0.86247        0.47373        0.28400        0.35511  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary']
+   12        0.85960        0.45147        0.24650        0.31889  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_payments']
+   13        0.85460        0.41470        0.22000        0.28749  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_payments', 'ratio_from']
+   14        0.85127        0.39155        0.20850        0.27210  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_payments', 'ratio_from', 'other']
+   15        0.84793        0.37216        0.20450        0.26396  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_payments', 'ratio_from', 'other', 'total_stock_value']
+   16        0.84080        0.32234        0.17600        0.22768  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'ratio_shared', 'expenses', 'deferral_payments', 'deferred_income', 'salary', 'total_payments', 'ratio_from', 'other', 'total_stock_value', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(10), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24365        0.24450        0.24407  ['director_fees']
+    2        0.79086        0.26707        0.26600        0.26653  ['director_fees', 'restricted_stock_deferred']
+    3        0.80221        0.29001        0.26550        0.27721  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.81693        0.35422        0.34200        0.34800  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.85547        0.44466        0.33750        0.38374  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.86073        0.46687        0.31350        0.37511  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options']
+    7        0.86047        0.46573        0.31600        0.37653  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses']
+    8        0.86853        0.51284        0.27950        0.36181  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared']
+    9        0.88520        0.61338        0.37600        0.46621  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value']
+   10        0.87540        0.55556        0.32750        0.41208  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income']
+   11        0.87200        0.53571        0.30000        0.38462  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from']
+   12        0.87147        0.53114        0.30700        0.38910  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from', 'deferral_payments']
+   13        0.87127        0.53029        0.30200        0.38484  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from', 'deferral_payments', 'other']
+   14        0.86580        0.49396        0.26600        0.34579  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from', 'deferral_payments', 'other', 'total_payments']
+   15        0.86147        0.46214        0.23800        0.31419  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from', 'deferral_payments', 'other', 'total_payments', 'salary']
+   16        0.85180        0.39550        0.21100        0.27519  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'total_stock_value', 'deferred_income', 'ratio_from', 'deferral_payments', 'other', 'total_payments', 'salary', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(10), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24365        0.24450        0.24407  ['director_fees']
+    2        0.79079        0.26623        0.26450        0.26536  ['director_fees', 'restricted_stock_deferred']
+    3        0.80229        0.29108        0.26750        0.27879  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.81771        0.35535        0.33900        0.34698  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.85607        0.44801        0.34250        0.38821  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.86180        0.47245        0.31300        0.37654  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value']
+    7        0.86147        0.46448        0.25500        0.32924  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments']
+    8        0.86060        0.45897        0.25450        0.32744  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options']
+    9        0.86267        0.47391        0.27250        0.34603  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income']
+   10        0.86520        0.49038        0.28050        0.35687  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses']
+   11        0.86467        0.48656        0.27150        0.34852  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared']
+   12        0.87173        0.53519        0.28900        0.37532  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from']
+   13        0.87093        0.52827        0.29900        0.38186  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_payments']
+   14        0.86107        0.46133        0.25050        0.32469  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_payments', 'other']
+   15        0.86353        0.47648        0.23800        0.31744  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_payments', 'other', 'salary']
+   16        0.85427        0.41210        0.21800        0.28515  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'total_stock_value', 'deferral_payments', 'exercised_stock_options', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_payments', 'other', 'salary', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(15), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76631        0.24230        0.24400        0.24315  ['director_fees']
+    2        0.79107        0.26887        0.26900        0.26893  ['director_fees', 'restricted_stock_deferred']
+    3        0.80207        0.28900        0.26400        0.27593  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.81921        0.36293        0.35150        0.35712  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.85387        0.43893        0.34500        0.38634  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.85360        0.43137        0.30800        0.35939  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options']
+    7        0.85580        0.44081        0.30350        0.35949  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses']
+    8        0.86380        0.48145        0.27900        0.35328  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared']
+    9        0.87793        0.56387        0.37300        0.44899  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income']
+   10        0.87840        0.56897        0.36300        0.44322  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from']
+   11        0.88087        0.58392        0.37050        0.45335  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments']
+   12        0.87833        0.57017        0.35550        0.43794  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments', 'total_stock_value']
+   13        0.87287        0.53790        0.33000        0.40905  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments', 'total_stock_value', 'total_payments']
+   14        0.86680        0.50087        0.28850        0.36612  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments', 'total_stock_value', 'total_payments', 'other']
+   15        0.86320        0.47566        0.25400        0.33116  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments', 'total_stock_value', 'total_payments', 'other', 'salary']
+   16        0.85200        0.40265        0.22750        0.29073  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'expenses', 'ratio_shared', 'deferred_income', 'ratio_from', 'deferral_payments', 'total_stock_value', 'total_payments', 'other', 'salary', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by precision, estimator: AdaBoost(15), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76631        0.24230        0.24400        0.24315  ['director_fees']
+    2        0.79114        0.26946        0.27000        0.26973  ['director_fees', 'restricted_stock_deferred']
+    3        0.80221        0.29023        0.26600        0.27759  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.81671        0.35397        0.34300        0.34840  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to']
+    5        0.85367        0.43722        0.33950        0.38221  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive']
+    6        0.85440        0.43475        0.30650        0.35953  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options']
+    7        0.85573        0.44329        0.32050        0.37203  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments']
+    8        0.85927        0.46055        0.32400        0.38039  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income']
+    9        0.86633        0.49813        0.33250        0.39880  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses']
+   10        0.86953        0.51811        0.30750        0.38594  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared']
+   11        0.87600        0.55609        0.34700        0.42734  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from']
+   12        0.87927        0.57412        0.36600        0.44702  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_stock_value']
+   13        0.87340        0.54096        0.33350        0.41262  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_stock_value', 'total_payments']
+   14        0.86847        0.51177        0.29350        0.37305  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_stock_value', 'total_payments', 'salary']
+   15        0.85333        0.41319        0.23800        0.30203  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_stock_value', 'total_payments', 'salary', 'other']
+   16        0.85373        0.41476        0.23600        0.30083  ['director_fees', 'restricted_stock_deferred', 'bonus', 'ratio_to', 'long_term_incentive', 'exercised_stock_options', 'deferral_payments', 'deferred_income', 'expenses', 'ratio_shared', 'ratio_from', 'total_stock_value', 'total_payments', 'salary', 'other', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: Naive Bayes, scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.84946        0.52392        0.23550        0.32494  ['director_fees']
+    2        0.25057        0.16010        1.00000        0.27601  ['director_fees', 'bonus']
+    3        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income']
+    4        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options']
+    5        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses']
+    6        0.24133        0.14948        1.00000        0.26008  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive']
+    7        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from']
+    8        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared']
+    9        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to']
+   10        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock']
+   11        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred']
+   12        0.33733        0.16750        1.00000        0.28694  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary']
+   13        0.33733        0.16750        1.00000        0.28694  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value']
+   14        0.33447        0.16646        0.99600        0.28524  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments']
+   15        0.33113        0.16285        0.97000        0.27888  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments', 'other']
+   16        0.33100        0.15689        0.91850        0.26800  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments', 'other', 'deferral_payments']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: Naive Bayes, scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.84946        0.52392        0.23550        0.32494  ['director_fees']
+    2        0.25057        0.16010        1.00000        0.27601  ['director_fees', 'bonus']
+    3        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income']
+    4        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options']
+    5        0.25371        0.16067        1.00000        0.27685  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses']
+    6        0.24133        0.14948        1.00000        0.26008  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive']
+    7        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from']
+    8        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared']
+    9        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to']
+   10        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock']
+   11        0.23753        0.14884        1.00000        0.25912  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred']
+   12        0.33733        0.16750        1.00000        0.28694  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary']
+   13        0.33733        0.16750        1.00000        0.28694  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value']
+   14        0.33447        0.16646        0.99600        0.28524  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments']
+   15        0.33113        0.16285        0.97000        0.27888  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments', 'other']
+   16        0.33100        0.15689        0.91850        0.26800  ['director_fees', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 'long_term_incentive', 'ratio_from', 'ratio_shared', 'ratio_to', 'restricted_stock', 'restricted_stock_deferred', 'salary', 'total_stock_value', 'total_payments', 'other', 'deferral_payments']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: KNN(1), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76646        0.24280        0.24450        0.24365  ['director_fees']
+    2        0.79029        0.26530        0.26450        0.26490  ['director_fees', 'restricted_stock_deferred']
+    3        0.79771        0.28265        0.27050        0.27644  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80673        0.28462        0.29700        0.29068  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus']
+    5        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared']
+    6        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options']
+    7        0.86153        0.47631        0.38700        0.42703  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other']
+    8        0.85700        0.45697        0.38500        0.41791  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary']
+    9        0.85520        0.44977        0.38500        0.41487  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments']
+   10        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses']
+   11        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from']
+   12        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income']
+   13        0.85187        0.43657        0.38200        0.40747  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value']
+   14        0.82073        0.29083        0.23950        0.26268  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock']
+   15        0.81293        0.24134        0.18800        0.21135  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock', 'long_term_incentive']
+   16        0.80840        0.22958        0.18550        0.20520  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock', 'long_term_incentive', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: KNN(1), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76646        0.24280        0.24450        0.24365  ['director_fees']
+    2        0.79029        0.26530        0.26450        0.26490  ['director_fees', 'restricted_stock_deferred']
+    3        0.79771        0.28265        0.27050        0.27644  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80673        0.28462        0.29700        0.29068  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus']
+    5        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared']
+    6        0.81720        0.30370        0.28700        0.29512  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options']
+    7        0.86153        0.47631        0.38700        0.42703  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other']
+    8        0.85700        0.45697        0.38500        0.41791  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary']
+    9        0.85520        0.44977        0.38500        0.41487  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments']
+   10        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses']
+   11        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from']
+   12        0.85687        0.45643        0.38500        0.41768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income']
+   13        0.85187        0.43657        0.38200        0.40747  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value']
+   14        0.82073        0.29083        0.23950        0.26268  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock']
+   15        0.81293        0.24134        0.18800        0.21135  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock', 'long_term_incentive']
+   16        0.80840        0.22958        0.18550        0.20520  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'bonus', 'ratio_shared', 'exercised_stock_options', 'other', 'salary', 'deferral_payments', 'expenses', 'ratio_from', 'deferred_income', 'total_stock_value', 'restricted_stock', 'long_term_incentive', 'total_payments']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: KNN(2), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.83077        0.27169        0.05950        0.09762  ['director_fees']
+    2        0.84479        0.28536        0.05750        0.09571  ['director_fees', 'restricted_stock_deferred']
+    3        0.84750        0.33890        0.07100        0.11740  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.83543        0.23883        0.06950        0.10767  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options']
+    5        0.87421        0.69243        0.21500        0.32812  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared']
+    6        0.88227        0.67515        0.22550        0.33808  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary']
+    7        0.88293        0.69741        0.21550        0.32926  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other']
+    8        0.87653        0.60511        0.21300        0.31509  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments']
+    9        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses']
+   10        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from']
+   11        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to']
+   12        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income']
+   13        0.86793        0.52235        0.11100        0.18309  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments']
+   14        0.86200        0.39766        0.06800        0.11614  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock']
+   15        0.87027        0.54313        0.17000        0.25895  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock', 'total_stock_value']
+   16        0.86147        0.38393        0.06450        0.11045  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock', 'total_stock_value', 'long_term_incentive']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: KNN(2), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.83077        0.27169        0.05950        0.09762  ['director_fees']
+    2        0.84479        0.28536        0.05750        0.09571  ['director_fees', 'restricted_stock_deferred']
+    3        0.84750        0.33890        0.07100        0.11740  ['director_fees', 'restricted_stock_deferred', 'bonus']
+    4        0.83543        0.23883        0.06950        0.10767  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options']
+    5        0.87421        0.69243        0.21500        0.32812  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared']
+    6        0.88227        0.67515        0.22550        0.33808  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary']
+    7        0.88293        0.69741        0.21550        0.32926  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other']
+    8        0.87653        0.60511        0.21300        0.31509  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments']
+    9        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses']
+   10        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from']
+   11        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to']
+   12        0.87607        0.59916        0.21300        0.31428  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income']
+   13        0.86793        0.52235        0.11100        0.18309  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments']
+   14        0.86200        0.39766        0.06800        0.11614  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock']
+   15        0.87027        0.54313        0.17000        0.25895  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock', 'total_stock_value']
+   16        0.86147        0.38393        0.06450        0.11045  ['director_fees', 'restricted_stock_deferred', 'bonus', 'exercised_stock_options', 'ratio_shared', 'salary', 'other', 'deferral_payments', 'expenses', 'ratio_from', 'ratio_to', 'deferred_income', 'total_payments', 'restricted_stock', 'total_stock_value', 'long_term_incentive']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.83892        0.41696        0.11800        0.18394  ['director_fees']
+    2        0.85071        0.42133        0.12050        0.18740  ['director_fees', 'restricted_stock_deferred']
+    3        0.84771        0.39457        0.12350        0.18812  ['director_fees', 'restricted_stock_deferred', 'ratio_shared']
+    4        0.85460        0.42636        0.26200        0.32456  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus']
+    5        0.84533        0.40577        0.34450        0.37263  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to']
+    6        0.83267        0.34142        0.27450        0.30432  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses']
+    7        0.86560        0.49461        0.36700        0.42135  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options']
+    8        0.86413        0.48732        0.36500        0.41738  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other']
+    9        0.86827        0.50748        0.40700        0.45172  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments']
+   10        0.86273        0.48157        0.38550        0.42821  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from']
+   11        0.86093        0.47342        0.38300        0.42344  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income']
+   12        0.86467        0.49036        0.38150        0.42913  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary']
+   13        0.86200        0.47776        0.37600        0.42082  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value']
+   14        0.85313        0.43464        0.33750        0.37996  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'long_term_incentive']
+   15        0.84900        0.41523        0.32450        0.36430  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'long_term_incentive', 'deferral_payments']
+   16        0.84733        0.40681        0.31650        0.35602  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'long_term_incentive', 'deferral_payments', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.83892        0.41696        0.11800        0.18394  ['director_fees']
+    2        0.85079        0.42207        0.12050        0.18748  ['director_fees', 'restricted_stock_deferred']
+    3        0.84771        0.39457        0.12350        0.18812  ['director_fees', 'restricted_stock_deferred', 'ratio_shared']
+    4        0.85460        0.42636        0.26200        0.32456  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus']
+    5        0.84533        0.40577        0.34450        0.37263  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to']
+    6        0.83260        0.34101        0.27400        0.30385  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses']
+    7        0.86560        0.49461        0.36700        0.42135  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options']
+    8        0.86440        0.48870        0.36750        0.41952  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other']
+    9        0.86780        0.50529        0.40600        0.45024  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments']
+   10        0.86340        0.48466        0.38700        0.43036  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from']
+   11        0.86187        0.47756        0.38300        0.42508  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income']
+   12        0.86393        0.48687        0.38000        0.42685  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary']
+   13        0.86287        0.48181        0.37750        0.42332  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value']
+   14        0.85333        0.43557        0.33800        0.38063  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'deferral_payments']
+   15        0.85087        0.42418        0.33150        0.37216  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'deferral_payments', 'long_term_incentive']
+   16        0.84747        0.40698        0.31500        0.35513  ['director_fees', 'restricted_stock_deferred', 'ratio_shared', 'bonus', 'ratio_to', 'expenses', 'exercised_stock_options', 'other', 'total_payments', 'ratio_from', 'deferred_income', 'salary', 'total_stock_value', 'deferral_payments', 'long_term_incentive', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(5), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24314        0.24350        0.24332  ['director_fees']
+    2        0.79057        0.26512        0.26300        0.26406  ['director_fees', 'restricted_stock_deferred']
+    3        0.80121        0.28262        0.25450        0.26782  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80253        0.21838        0.18650        0.20119  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.82367        0.26339        0.17950        0.21350  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options']
+    6        0.83560        0.33864        0.24450        0.28397  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus']
+    7        0.86747        0.50435        0.34800        0.41183  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared']
+    8        0.87420        0.54151        0.36850        0.43856  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value']
+    9        0.85987        0.46200        0.31000        0.37104  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive']
+   10        0.85840        0.45000        0.27900        0.34444  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income']
+   11        0.85587        0.43272        0.26050        0.32522  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from']
+   12        0.84687        0.37656        0.22650        0.28286  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from', 'expenses']
+   13        0.85247        0.40148        0.21700        0.28173  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from', 'expenses', 'other']
+   14        0.85253        0.40257        0.21900        0.28368  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments']
+   15        0.84727        0.37112        0.20950        0.26782  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments', 'salary']
+   16        0.84300        0.33519        0.18050        0.23464  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'total_stock_value', 'long_term_incentive', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments', 'salary', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(5), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24314        0.24350        0.24332  ['director_fees']
+    2        0.79057        0.26536        0.26350        0.26443  ['director_fees', 'restricted_stock_deferred']
+    3        0.80179        0.28556        0.25800        0.27108  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80360        0.21979        0.18550        0.20119  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.82413        0.26230        0.17600        0.21065  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options']
+    6        0.83440        0.33124        0.23750        0.27665  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus']
+    7        0.86460        0.48832        0.32400        0.38954  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared']
+    8        0.87293        0.53451        0.36400        0.43308  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive']
+    9        0.87047        0.52085        0.35600        0.42293  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value']
+   10        0.85887        0.45316        0.28300        0.34841  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income']
+   11        0.85647        0.43588        0.26000        0.32571  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from']
+   12        0.84753        0.37619        0.21800        0.27604  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from', 'expenses']
+   13        0.85467        0.41848        0.23100        0.29768  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from', 'expenses', 'other']
+   14        0.85133        0.39787        0.22400        0.28663  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments']
+   15        0.84673        0.36041        0.19300        0.25138  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments', 'restricted_stock']
+   16        0.84327        0.33884        0.18450        0.23891  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'exercised_stock_options', 'bonus', 'ratio_shared', 'long_term_incentive', 'total_stock_value', 'deferred_income', 'ratio_from', 'expenses', 'other', 'total_payments', 'restricted_stock', 'salary']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(10), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24365        0.24450        0.24407  ['director_fees']
+    2        0.79079        0.26623        0.26450        0.26536  ['director_fees', 'restricted_stock_deferred']
+    3        0.80286        0.29415        0.27150        0.28237  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80220        0.21475        0.18200        0.19702  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.82140        0.24143        0.15850        0.19137  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income']
+    6        0.83447        0.31746        0.21000        0.25278  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses']
+    7        0.86667        0.50000        0.26350        0.34512  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options']
+    8        0.86760        0.50655        0.27050        0.35267  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared']
+    9        0.88260        0.59967        0.35950        0.44952  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from']
+   10        0.87327        0.54191        0.32000        0.40239  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus']
+   11        0.88140        0.59341        0.35100        0.44109  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive']
+   12        0.87680        0.56355        0.33700        0.42178  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value']
+   13        0.87153        0.53274        0.29700        0.38138  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments']
+   14        0.86573        0.49377        0.27750        0.35531  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary']
+   15        0.85247        0.40345        0.22250        0.28682  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary', 'other']
+   16        0.85207        0.39908        0.21650        0.28071  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary', 'other', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(10), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76700        0.24365        0.24450        0.24407  ['director_fees']
+    2        0.79071        0.26610        0.26450        0.26530  ['director_fees', 'restricted_stock_deferred']
+    3        0.80250        0.29178        0.26800        0.27938  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.80067        0.20641        0.17400        0.18882  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.81980        0.23147        0.15150        0.18314  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income']
+    6        0.83640        0.32512        0.21100        0.25591  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses']
+    7        0.86867        0.51402        0.27500        0.35831  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options']
+    8        0.86533        0.49065        0.26250        0.34202  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared']
+    9        0.88113        0.58743        0.36450        0.44986  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from']
+   10        0.87427        0.54806        0.32500        0.40804  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus']
+   11        0.88073        0.58784        0.35300        0.44111  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive']
+   12        0.87680        0.56485        0.33100        0.41740  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value']
+   13        0.86953        0.51942        0.28750        0.37013  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'other']
+   14        0.86640        0.49812        0.26450        0.34553  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'other', 'salary']
+   15        0.86180        0.46617        0.25150        0.32673  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'other', 'salary', 'total_payments']
+   16        0.85200        0.39964        0.21900        0.28295  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'other', 'salary', 'total_payments', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(15), scaled=0
+    k       accuracy      precision         recall             f1
+    1        0.76631        0.24230        0.24400        0.24315  ['director_fees']
+    2        0.79129        0.27019        0.27100        0.27059  ['director_fees', 'restricted_stock_deferred']
+    3        0.80200        0.28907        0.26450        0.27624  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.79847        0.20313        0.17500        0.18802  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.81813        0.23314        0.15900        0.18906  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income']
+    6        0.83667        0.33159        0.22150        0.26559  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses']
+    7        0.86587        0.49471        0.28050        0.35801  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options']
+    8        0.86560        0.49277        0.27250        0.35093  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared']
+    9        0.87860        0.57109        0.35950        0.44124  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from']
+   10        0.87020        0.52206        0.31350        0.39175  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus']
+   11        0.88180        0.58751        0.38100        0.46224  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive']
+   12        0.87940        0.57526        0.36500        0.44662  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value']
+   13        0.87367        0.54293        0.33200        0.41204  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments']
+   14        0.86753        0.50555        0.29600        0.37338  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary']
+   15        0.85500        0.42222        0.23750        0.30400  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary', 'other']
+   16        0.85173        0.40311        0.23300        0.29531  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'long_term_incentive', 'total_stock_value', 'total_payments', 'salary', 'other', 'restricted_stock']
+
+Forward Stepwise Selection with All Features, scoring by recall, estimator: AdaBoost(15), scaled=1
+    k       accuracy      precision         recall             f1
+    1        0.76631        0.24230        0.24400        0.24315  ['director_fees']
+    2        0.79121        0.26983        0.27050        0.27016  ['director_fees', 'restricted_stock_deferred']
+    3        0.80214        0.28985        0.26550        0.27714  ['director_fees', 'restricted_stock_deferred', 'ratio_to']
+    4        0.79787        0.20345        0.17700        0.18930  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments']
+    5        0.81947        0.23817        0.16100        0.19212  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income']
+    6        0.83753        0.33559        0.22300        0.26795  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses']
+    7        0.86593        0.49499        0.27150        0.35066  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options']
+    8        0.86680        0.50090        0.27900        0.35838  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared']
+    9        0.87700        0.56165        0.35300        0.43353  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from']
+   10        0.87160        0.53038        0.32300        0.40149  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus']
+   11        0.88320        0.59657        0.38300        0.46650  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'total_payments']
+   12        0.87440        0.54596        0.34450        0.42244  ['director_fees', 'restricted_stock_deferred', 'ratio_to', 'deferral_payments', 'deferred_income', 'expenses', 'exercised_stock_options', 'ratio_shared', 'ratio_from', 'bonus', 'total_payments', 'long_term_incentive']
+
